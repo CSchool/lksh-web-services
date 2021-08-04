@@ -8,6 +8,11 @@
  pip install django djangorestframework django-cors-headers gunicorn
  pip freeze > requirements.txt
 
+
+
+
+TODO: docker
+
 Изменить docker-compose.yml
 
  docker-compose up
