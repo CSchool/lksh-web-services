@@ -4,7 +4,7 @@ from rest_framework import permissions
 from .models import User, Group, PrizeClass, PrizeItem, TokenTransfer
 from .serializers import UserSerializer, GroupSerializer, \
     PrizeClassSerializer, PrizeItemSerializer, TokenTransferSerializer
-
+from .permissions import IsGetOrIsAdmin
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
@@ -19,7 +19,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 class PrizeClassViewSet(viewsets.ModelViewSet):
     queryset = PrizeClass.objects.all()
     serializer_class = PrizeClassSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsGetOrIsAdmin]
 
     # def get(self, request, format=None):
     #     serializer = PrizeClassSerializer(queryset, context={"request": 

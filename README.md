@@ -5,9 +5,10 @@
  cd shop
  python3 -m venv env
  . env/bin/activate
- pip install django djangorestframework django-cors-headers gunicorn
+ pip install django djangorestframework django-cors-headers gunicorn Pillow
  pip freeze > requirements.txt
 
+ python manage.py 
 
 
 
