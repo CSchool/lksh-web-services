@@ -1,8 +1,9 @@
-import { BackendURL, fetchBackend } from '../Backend/Backend';
+import { BackendURL, fetchBackend, postBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
+import PausedButton from '../Controls/PausedButton';
 
 function ShopItem(props) {
     return (
@@ -12,12 +13,20 @@ function ShopItem(props) {
             <Col xs={4}>{props.item.description}</Col>
             <Col xs={1}>{props.item.price}</Col>
             <Col xs={1}>{props.item.count}</Col>
-            <Col xs={1}>{"Купить"}</Col>
+            <Col xs={1}>
+                {props.auth.isAuthenticated
+                    && props.auth.tokens >= props.item.price
+                    ? <PausedButton
+                        onClick={() => postBackend("buy/", {}, {id:props.item.id})}
+                        variant="outline-primary">{"Купить"}</PausedButton>
+                    : ""
+                }
+            </Col>
         </Row>
     );
 }
 
-export function Shop() {
+export function Shop(props) {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -42,7 +51,7 @@ export function Shop() {
             </Row>
             {data.map(item => {
                 return (
-                    <ShopItem key={item.id} item={item} />
+                    <ShopItem key={item.id} item={item} auth={props.auth} />
                 );
             })}
         </Container>

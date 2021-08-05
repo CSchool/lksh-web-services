@@ -35,7 +35,6 @@ class App extends Component {
           fetchBackend('auth/user/')
               .then(response => response.json())
               .then(response => {
-                  console.log(response);
                   if (response.pk > 0) {
                       this.setState({ isAuthenticated: true,
                                       user_id: response.pk,

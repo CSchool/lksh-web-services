@@ -15,7 +15,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.userprofile.save()
 
 
 class PrizeClass(models.Model):
@@ -48,6 +48,15 @@ class PrizeItem(models.Model):
 
     class Meta:
         ordering = ['date_purchased']
+
+    @classmethod
+    def create(cls, prize, profile):
+        item = cls()
+        item.owner = profile.user
+        item.info = prize
+        item.price = prize.price
+        item.save()
+        return item
 
 class TokenTransfer(models.Model):
     """

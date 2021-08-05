@@ -23,7 +23,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
 
 class PrizeClassViewSet(viewsets.ModelViewSet):
-    queryset = PrizeClass.objects.all().order_by('-price')
+    queryset = PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
     serializer_class = PrizeClassSerializer
     permission_classes = [IsGetOrIsAdmin]
 
