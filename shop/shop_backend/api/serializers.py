@@ -1,10 +1,32 @@
 from rest_framework import serializers
-from api.models import User, Group, PrizeClass, PrizeItem, TokenTransfer
+from django.contrib.auth.models import User, Group
+from api.models import Profile, PrizeClass, PrizeItem, TokenTransfer
+from dj_rest_auth.serializers import UserDetailsSerializer
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'tokens', 'groups']
+        model = Profile
+        fields = ('tokens',)
+
+class UserSerializer(UserDetailsSerializer):
+    profile = ProfileSerializer(source="userprofile")
+
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + ('profile',)
+
+    def update(self, instance, validated_data):
+        profile_serializer = self.fields['profile']
+        profile_instance = instance.userprofile
+        profile_data = validated_data.pop('userprofile', {})
+
+        # to access the 'company_name' field in here
+        tokens = userprofile_data.get('tokens')
+
+        # update the userprofile fields
+        profile_serializer.update(profile_instance, profile_data)
+
+        instance = super().update(instance, validated_data)
+        return instance
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:

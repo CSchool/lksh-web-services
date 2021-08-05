@@ -1,17 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User as StdUser, Group as StdGroup
+from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-class User(StdUser):
-    """
-    Custom user of the shop.
-    """
+class Profile(models.Model):
+    user = models.OneToOneField(User, related_name='userprofile', on_delete=models.CASCADE)
     tokens = models.IntegerField(_('tokens'), default=0)
 
-class Group(StdGroup):
-    """
-    Custom group of the shop users.
-    """
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
 
 class PrizeClass(models.Model):
     """

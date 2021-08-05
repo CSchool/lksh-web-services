@@ -87,6 +87,10 @@ REST_FRAMEWORK = {
     ]
 }
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'api.serializers.UserSerializer'
+}
+
 WSGI_APPLICATION = 'shop.wsgi.application'
 
 

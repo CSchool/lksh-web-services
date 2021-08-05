@@ -41,7 +41,7 @@ class App extends Component {
                                       user_id: response.pk,
                                       username: response.username,
                                       isAuthenticating: false,
-                                      tokens: response.tokens });
+                                      tokens: response.profile.tokens });
                   } else {
                       this.logout();
                   }
