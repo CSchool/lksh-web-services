@@ -2,7 +2,6 @@ import { BackendURL, fetchBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
-import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
 
 function ShopItem(props) {
