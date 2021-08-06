@@ -28,7 +28,8 @@ export function BackendURL(page, params)
 export function fetchBackend(page, params, func) {
     var csrftoken = getCookie('csrftoken');
     return fetch(BackendURL(page, params),
-      {credentials: "include", headers: { 
+      {credentials: "include",
+       headers: {
           "Access-Control-Allow-Credentials" : true,
           "SameSite" : "Strict",
           'X-CSRFToken': csrftoken

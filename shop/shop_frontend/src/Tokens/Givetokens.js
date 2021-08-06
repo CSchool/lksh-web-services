@@ -13,6 +13,7 @@ export default class Givetokens extends Component {
             groups:[],
             users:[],
             user:0,
+            group:0,
             username:"",
             tokens: 0,
         };
@@ -36,13 +37,17 @@ export default class Givetokens extends Component {
     }
 
     handleUpdate = () => {
+        var filter = {}
+        if (this.state.group)
+            filter = {group:this.state.group}
         fetchBackend('groups/', {},
             data => {
                 this.setState({ groups: data });
             }
         );
-        fetchBackend('users/', {},
+        fetchBackend('users/', filter,
             data => {
+                console.log(data);
                 this.setState({ users: data });
             }
         );
@@ -58,8 +63,21 @@ export default class Givetokens extends Component {
                 <h2>{"Выдать баллы"}</h2>
                 <h3>{"Группа"}</h3>
                 <ListGroup>
+                    <ListGroup.Item key={0}
+                            active={this.state.group===0}
+                            onClick={() => {
+                                this.setState({group:0, user:0, username:''},
+                                    this.handleUpdate);
+                            }}>
+                        {"Все группы"}
+                    </ListGroup.Item>
                 {this.state.groups.map(group =>
-                    <ListGroup.Item key={group.id}>
+                    <ListGroup.Item key={group.id}
+                        active={this.state.group===group.id}
+                        onClick={() => {
+                            this.setState({group:group.id, user:0, username:''},
+                                this.handleUpdate);
+                        }}>
                         {group.name}
                     </ListGroup.Item>
                 )}

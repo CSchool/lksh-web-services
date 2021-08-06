@@ -8,19 +8,22 @@ from .serializers import UserSerializer, GroupSerializer, \
 from .permissions import IsGetOrIsAdmin
 
 class UserListView(generics.ListAPIView):
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
+    serializer_class = UserSerializer
 
-# def update_profile(request, user_id):
-#     user = User.objects.get(pk=user_id)
-#     user.profile.bio = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit...'
-#     user.save()
+    def get_queryset(self):
+        queryset = User.objects.all()
+        group = self.request.query_params.get("group")
+        if group:
+            queryset = queryset.filter(groups=group)
+        queryset.order_by("last_name")
+        return queryset
 
 class GroupListView(generics.ListAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.AllowAny]
+
 
 class PrizeClassViewSet(viewsets.ModelViewSet):
     queryset = PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
