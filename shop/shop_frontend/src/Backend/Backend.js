@@ -47,7 +47,8 @@ export function postBackend(page, params, form, func) {
                     "SameSite" : "Strict",
                     "Content-Type": "application/json",
                     'X-CSRFToken': csrftoken } } )
-            .then(func ? func : () => {});
+            .then(response => response.json())
+            .then(data => { if (func) func(data); });
 }
 
 export function uploadBackend(page, params, file) {

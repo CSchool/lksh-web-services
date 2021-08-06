@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component, Suspense } from 'react';
 import NavbarMain from './Navbar/Main';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -5,13 +6,14 @@ import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
 import Giveaway from './Prize/Giveaway';
 import Owned from './Prize/Owned';
+import Givetokens from './Tokens/Givetokens';
 import AppliedRoute from "./AppliedRoute";
 import Login from './Auth/Login';
 
 class NotFound extends Component {
     render() { return "Not found"; }
 }
-  
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -42,10 +44,10 @@ class App extends Component {
                   if (response.pk > 0) {
                       this.setState({ isAuthenticated: true,
                                       user_id: response.pk,
-                                      username: response.username,
+                                      username: response.full_name,
                                       isAuthenticating: false,
                                       is_staff: response.is_staff,
-                                      tokens: response.profile.tokens });
+                                      tokens: parseInt(response.profile.tokens) });
                   } else {
                       this.logout();
                   }
@@ -91,6 +93,8 @@ class App extends Component {
                             <AppliedRoute path="/" exact component={Shop}
                                 props={childProps} />
                             <AppliedRoute path="/giveaway" exact component={Giveaway}
+                                props={childProps} />
+                            <AppliedRoute path="/givetokens" exact component={Givetokens}
                                 props={childProps} />
                             <AppliedRoute path="/prizes" exact component={Owned}
                                 props={childProps} />

@@ -32,9 +32,9 @@ export class Login extends Component {
     event.preventDefault();
 
     postBackend('auth/login/', {},
-          { username:this.state.login, password:this.state.password })
-        .then(response => response.json())
-        .then(response => {
+        { username:this.state.login, password:this.state.password },
+        response => {
+            console.log(response);
             if (response.key) {
                 this.props.auth.userRefresh(true);
                 this.props.history.push("/");

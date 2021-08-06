@@ -7,7 +7,7 @@ from .serializers import UserSerializer, GroupSerializer, \
     PrizeClassSerializer, PrizeItemSerializer, TokenTransferSerializer
 from .permissions import IsGetOrIsAdmin
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserListView(generics.ListAPIView):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -17,10 +17,10 @@ class UserViewSet(viewsets.ModelViewSet):
 #     user.profile.bio = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit...'
 #     user.save()
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupListView(generics.ListAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]
 
 class PrizeClassViewSet(viewsets.ModelViewSet):
     queryset = PrizeClass.objects.all().filter(count__gt=0).order_by('-price')

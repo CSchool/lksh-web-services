@@ -48,3 +48,25 @@ class GivePrizeView(views.APIView):
             return Response({}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
+
+class PayTokensView(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        if request.user.is_staff:
+            with transaction.atomic():
+                profile = models.Profile.objects.select_for_update(). \
+                    get(user=request.user)
+                user_profile = models.Profile.objects.select_for_update(). \
+                    get(user=request.data["user"])
+                tokens = request.data["tokens"]
+                if tokens > profile.tokens:
+                    return Response({"error":"not enough tokens"}, status=status.HTTP_400_BAD_REQUEST)
+                profile.tokens -= tokens
+                user_profile.tokens += tokens
+                profile.save()
+                user_profile.save()
+                models.TokenTransfer.create(profile.user, user_profile.user, tokens)
+            return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)

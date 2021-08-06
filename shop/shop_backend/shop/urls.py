@@ -23,8 +23,6 @@ from api import views
 from api import actions
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
 router.register(r'prizeclasses', views.PrizeClassViewSet)
 router.register(r'tokentransfers', views.TokenTransferViewSet)
 
@@ -37,6 +35,9 @@ urlpatterns = [
    path('auth/', include('dj_rest_auth.urls')),
    path('user/', views.CurrentUserView.as_view(), name='currentuser'),
    path('prizeitems/', views.PrizeItemList.as_view(), name='prizeitems'),
+   path('users/', views.UserListView.as_view(), name='users'),
+   path('groups/', views.GroupListView.as_view(), name='groups'),
    path('buy/', actions.BuyPrizeView.as_view(), name='buyprize'),
+   path('pay/', actions.PayTokensView.as_view(), name='paytokens'),
    path('give/', actions.GivePrizeView.as_view(), name='giveprize'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

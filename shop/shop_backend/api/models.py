@@ -63,10 +63,19 @@ class TokenTransfer(models.Model):
     """
     Token transfer transaction.
     """
-    count = models.IntegerField(_('sount'),)
+    count = models.IntegerField(_('count'),)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     from_user = models.ForeignKey(User, related_name='tokens_to_users', on_delete=models.CASCADE)
     to_user = models.ForeignKey(User, related_name='tokens_from_users', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['created']
+
+    @classmethod
+    def create(cls, from_user, to_user, tokens):
+        item = cls()
+        item.count = tokens
+        item.from_user = from_user
+        item.to_user = to_user
+        item.save()
+        return item

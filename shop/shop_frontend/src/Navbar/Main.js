@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
+
+function NavLink(props) {
+    if (!props.show)
+        return <div />;
+    return (
+        <Nav.Item>
+            <Nav.Link href={props.link}>
+                {props.text}
+            </Nav.Link>
+        </Nav.Item>
+    );
+}
+
 class NavbarMain extends Component {
     handleLogout = event => {
         event.preventDefault();
@@ -15,29 +28,25 @@ class NavbarMain extends Component {
                  <Navbar.Toggle />
 
                  <Navbar.Collapse className="justify-content-end">
-                    {this.props.auth.isAuthenticated
-                        ? <Navbar.Text>
-                            {"Привет, "}{this.props.auth.username}
-                            {"! Баллов на счету: "}{this.props.auth.tokens}
-                          </Navbar.Text>
-                        : <div/>
-                    }
+                        {this.props.auth.isAuthenticated
+                            ? <Navbar.Text>
+                                {"Привет, "}{this.props.auth.username}
+                                {"! Баллов на счету: "}{this.props.auth.tokens}
+                              </Navbar.Text>
+                            : <div/>
+                        }
                     <Nav>
-                        <Nav.Link href="/">{"Магазин"}</Nav.Link>
-                    {this.props.auth.is_staff
-                        ? <>
-                            <Nav.Link href="/">{"Выдать баллы"}</Nav.Link>
-                            <Nav.Link href="/giveaway">{"Выдать призы"}</Nav.Link>
-                         </>
-                        : <div />
-                    }
-                    {this.props.auth.isAuthenticated
-                        ? <>
-                            <Nav.Link href="/prizes">{"Мои призы"}</Nav.Link>
-                            <Nav.Link href="#" onClick={this.handleLogout}>{"Выйти"}</Nav.Link>
-                          </>
-                        : <Nav.Link href="/login">{"Войти"}</Nav.Link>
-                    }
+                        <NavLink link="/" text="Магазин" show />
+                        <NavLink link="/givetokens" text="Выдать баллы"
+                            show={this.props.auth.is_staff} />
+                        <NavLink link="/giveaway" text="Выдать призы"
+                            show={this.props.auth.is_staff} />
+                        <NavLink link="/prizes" text="Мои призы"
+                            show={this.props.auth.isAuthenticated && !this.props.auth.is_staff} />
+                        <NavLink link="#" text="Выйти"
+                            show={this.props.auth.isAuthenticated} />
+                        <NavLink link="/login" text="Войти"
+                            show={!this.props.auth.isAuthenticated} />
                     </Nav>
                  </Navbar.Collapse>
             </Navbar>

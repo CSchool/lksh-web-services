@@ -11,9 +11,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(UserDetailsSerializer):
     profile = ProfileSerializer(source="userprofile")
     is_staff = serializers.ReadOnlyField()
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, obj):
+        return '{} {}'.format(obj.first_name, obj.last_name)
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('is_staff', 'profile', )
+        fields = UserDetailsSerializer.Meta.fields + ('is_staff', 'profile', 'full_name')
 
     def update(self, instance, validated_data):
         profile_serializer = self.fields['profile']

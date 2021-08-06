@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types'
 
 
 export default class PausedButton extends Component {
@@ -20,17 +21,29 @@ export default class PausedButton extends Component {
                 if (this.props.onClick) {
                     this.props.onClick();
                 }
-                // enable it after 10 seconds
-                setTimeout(() => this.setState({disabled:false}), 10000);
+                setTimeout(() => this.setState({disabled:false}), this.props.pause * 1000);
             });
     }
 
     render() {
         return (
             <Button variant={this.props.variant}
-                onClick={this.handleClick} disabled={this.state.disabled}>
+                onClick={this.handleClick}
+                disabled={this.state.disabled || this.props.disabled}>
                 {this.props.children}
             </Button>
         )
     }
+}
+
+PausedButton.defaultProps = {
+    pause: 10,
+    disabled: false,
+}
+
+PausedButton.propTypes = {
+    pause: PropTypes.number,
+    disabled: PropTypes.bool,
+    variant: PropTypes.string,
+    onClick: PropTypes.func,
 }
