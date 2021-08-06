@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, views
+from rest_framework import generics, viewsets, views
 from rest_framework.response import Response
 from rest_framework import permissions
 from .models import User, Group, PrizeClass, PrizeItem, TokenTransfer
@@ -32,10 +32,22 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
     #                     request}, many=True)
     #     return Response(serializer.data) 
 
-class PrizeItemViewSet(viewsets.ModelViewSet):
-    queryset = PrizeItem.objects.all()
-    serializer_class = PrizeItemSerializer
-    permission_classes = [permissions.IsAdminUser]
+class PrizeItemList(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, format=None):
+        if request.user.is_staff:
+            queryset = PrizeItem.objects.all().filter(date_taken__isnull=True)
+            serializer = PrizeItemSerializer(queryset, context={"request": 
+                         request}, many=True)
+            return Response(serializer.data)
+        elif request.user.is_authenticated:
+            queryset = PrizeItem.objects.all().filter(owner=request.user)
+            serializer = PrizeItemSerializer(queryset, context={"request": 
+                         request}, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
 
 class TokenTransferViewSet(viewsets.ModelViewSet):
     queryset = TokenTransfer.objects.all()

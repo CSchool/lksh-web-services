@@ -44,6 +44,7 @@ class PrizeItem(models.Model):
     date_purchased = models.DateTimeField(_('date_purchased'), auto_now_add=True)
     date_taken = models.DateTimeField(_('date_taken'), blank=True, null=True)
     owner = models.ForeignKey(User, related_name='items', on_delete=models.CASCADE, null=False)
+    given_by = models.ForeignKey(User, related_name='given', on_delete=models.CASCADE, null=True)
     info = models.ForeignKey(PrizeClass, related_name='items', on_delete=models.CASCADE, null=False)
 
     class Meta:

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import render
 from django.db import transaction
 from rest_framework import views
@@ -29,3 +30,21 @@ class BuyPrizeView(views.APIView):
             return Response({}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
+
+class GivePrizeView(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        if request.user.is_staff:
+            with transaction.atomic():
+                prize = models.PrizeItem.objects. \
+                    select_for_update().get(pk=request.data["id"])
+                if prize.date_taken:
+                    return Response({"error":"already taken"}, status=status.HTTP_400_BAD_REQUEST)
+                prize.given_by = request.user
+                prize.save()
+                prize.date_taken = timezone.now()
+                prize.save()
+            return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)

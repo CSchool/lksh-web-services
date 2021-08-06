@@ -2,7 +2,9 @@ import React, { Component, Suspense } from 'react';
 import NavbarMain from './Navbar/Main';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import fetchBackend, { postBackend } from './Backend/Backend';
-import { Shop } from './Prize/Shop';
+import Shop from './Prize/Shop';
+import Giveaway from './Prize/Giveaway';
+import Owned from './Prize/Owned';
 import AppliedRoute from "./AppliedRoute";
 import Login from './Auth/Login';
 
@@ -17,6 +19,7 @@ class App extends Component {
         this.state = {
           isAuthenticated: false,
           isAuthenticating: true,
+          is_staff: false,
           username: "",
           user_id: -1,
           tokens: 0,
@@ -26,33 +29,35 @@ class App extends Component {
       logout = () => {
           this.setState({ isAuthenticated: false,
                           isAuthenticating: false,
+                          is_staff: false,
                           username: "",
                           user_id: -1,
                           tokens: 0, });
       }
 
       loadSession = () => {
-          fetchBackend('auth/user/')
-              .then(response => response.json())
-              .then(response => {
+          fetchBackend('auth/user/', {},
+              response =>
+              {
                   if (response.pk > 0) {
                       this.setState({ isAuthenticated: true,
                                       user_id: response.pk,
                                       username: response.username,
                                       isAuthenticating: false,
+                                      is_staff: response.is_staff,
                                       tokens: response.profile.tokens });
                   } else {
                       this.logout();
                   }
-              })
-              .catch(error => this.logout() );
+              }
+          );
       }
 
     async componentDidMount() {
         this.loadSession();
     }
 
-    userHasAuthenticated = authenticated => {
+    userRefresh = authenticated => {
         if (!authenticated) {
             postBackend('auth/logout/')
                 .catch(error => {})
@@ -68,8 +73,9 @@ class App extends Component {
             isAuthenticated: this.state.isAuthenticated,
             username: this.state.username,
             user_id: this.state.user_id,
+            is_staff: this.state.is_staff,
             tokens: this.state.tokens,
-            userHasAuthenticated: this.userHasAuthenticated
+            userRefresh: this.userRefresh
         } };
 
         if (this.state.isAuthenticating) {
@@ -83,6 +89,10 @@ class App extends Component {
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
                             <AppliedRoute path="/" exact component={Shop}
+                                props={childProps} />
+                            <AppliedRoute path="/giveaway" exact component={Giveaway}
+                                props={childProps} />
+                            <AppliedRoute path="/prizes" exact component={Owned}
                                 props={childProps} />
                             <AppliedRoute path="/login" exact component={Login}
                                 props={childProps} />

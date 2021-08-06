@@ -25,17 +25,19 @@ export function BackendURL(page, params)
     return url;
 }
 
-export function fetchBackend(page, params) {
+export function fetchBackend(page, params, func) {
     var csrftoken = getCookie('csrftoken');
     return fetch(BackendURL(page, params),
       {credentials: "include", headers: { 
           "Access-Control-Allow-Credentials" : true,
           "SameSite" : "Strict",
           'X-CSRFToken': csrftoken
-        } } );
+        } } )
+        .then(response => response.json())
+        .then(data => { if (func) func(data); });
 }
 
-export function postBackend(page, params, form) {
+export function postBackend(page, params, form, func) {
     var csrftoken = getCookie('csrftoken');
     return fetch(BackendURL(page, params),
                  {method: 'POST', credentials: "include",
@@ -44,7 +46,8 @@ export function postBackend(page, params, form) {
                     "Access-Control-Allow-Credentials" : true,
                     "SameSite" : "Strict",
                     "Content-Type": "application/json",
-                    'X-CSRFToken': csrftoken } } );
+                    'X-CSRFToken': csrftoken } } )
+            .then(func ? func : () => {});
 }
 
 export function uploadBackend(page, params, file) {

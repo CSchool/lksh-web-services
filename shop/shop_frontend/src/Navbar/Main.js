@@ -5,7 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 class NavbarMain extends Component {
     handleLogout = event => {
         event.preventDefault();
-        this.props.auth.userHasAuthenticated(false);
+        this.props.auth.userRefresh(false);
     }
 
     render() {
@@ -23,8 +23,19 @@ class NavbarMain extends Component {
                         : <div/>
                     }
                     <Nav>
+                        <Nav.Link href="/">{"Магазин"}</Nav.Link>
+                    {this.props.auth.is_staff
+                        ? <>
+                            <Nav.Link href="/">{"Выдать баллы"}</Nav.Link>
+                            <Nav.Link href="/giveaway">{"Выдать призы"}</Nav.Link>
+                         </>
+                        : <div />
+                    }
                     {this.props.auth.isAuthenticated
-                        ? <Nav.Link href="#" onClick={this.handleLogout}>{"Выйти"}</Nav.Link>
+                        ? <>
+                            <Nav.Link href="/prizes">{"Мои призы"}</Nav.Link>
+                            <Nav.Link href="#" onClick={this.handleLogout}>{"Выйти"}</Nav.Link>
+                          </>
                         : <Nav.Link href="/login">{"Войти"}</Nav.Link>
                     }
                     </Nav>

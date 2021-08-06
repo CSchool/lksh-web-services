@@ -36,7 +36,7 @@ export class Login extends Component {
         .then(response => response.json())
         .then(response => {
             if (response.key) {
-                this.props.auth.userHasAuthenticated(true);
+                this.props.auth.userRefresh(true);
                 this.props.history.push("/");
             } else {
                 this.setState({alert:'Login error'});

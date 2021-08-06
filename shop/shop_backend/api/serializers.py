@@ -10,16 +10,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class UserSerializer(UserDetailsSerializer):
     profile = ProfileSerializer(source="userprofile")
+    is_staff = serializers.ReadOnlyField()
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('profile',)
+        fields = UserDetailsSerializer.Meta.fields + ('is_staff', 'profile', )
 
     def update(self, instance, validated_data):
         profile_serializer = self.fields['profile']
         profile_instance = instance.userprofile
         profile_data = validated_data.pop('userprofile', {})
 
-        # to access the 'company_name' field in here
         tokens = userprofile_data.get('tokens')
 
         # update the userprofile fields
@@ -44,12 +44,17 @@ class PrizeClassSerializer(serializers.ModelSerializer):
     #     return request.build_absolute_uri(photo_url)
 
 class PrizeItemSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
     name = serializers.ReadOnlyField(source='info.name')
+    picture = serializers.ImageField(source='info.picture')
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, obj):
+        return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
 
     class Meta:
         model = PrizeItem
-        fields = ['id', 'name', 'date_purchased', 'date_taken', 'price', 'owner']
+        fields = ['id', 'name', 'date_purchased', 'date_taken',
+                  'price', 'full_name', 'picture']
 
 class TokenTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.ReadOnlyField(source='from_user.username')

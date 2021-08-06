@@ -26,7 +26,6 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'prizeclasses', views.PrizeClassViewSet)
-router.register(r'prizeitems', views.PrizeItemViewSet)
 router.register(r'tokentransfers', views.TokenTransferViewSet)
 
 # Wire up our API using automatic URL routing.
@@ -37,5 +36,7 @@ urlpatterns = [
    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
    path('auth/', include('dj_rest_auth.urls')),
    path('user/', views.CurrentUserView.as_view(), name='currentuser'),
+   path('prizeitems/', views.PrizeItemList.as_view(), name='prizeitems'),
    path('buy/', actions.BuyPrizeView.as_view(), name='buyprize'),
+   path('give/', actions.GivePrizeView.as_view(), name='giveprize'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

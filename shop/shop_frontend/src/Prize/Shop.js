@@ -17,7 +17,14 @@ function ShopItem(props) {
                 {props.auth.isAuthenticated
                     && props.auth.tokens >= props.item.price
                     ? <PausedButton
-                        onClick={() => postBackend("buy/", {}, {id:props.item.id})}
+                        onClick={() =>
+                            postBackend("buy/", {}, {id:props.item.id},
+                                () => {
+                                    if (props.onChange)
+                                        props.onChange();
+                                    props.auth.userRefresh(true);
+                                })
+                        }
                         variant="outline-primary">{"Купить"}</PausedButton>
                     : ""
                 }
@@ -26,18 +33,19 @@ function ShopItem(props) {
     );
 }
 
-export function Shop(props) {
+export default function Shop(props) {
     const [data, setData] = useState([]);
 
+    const fetchData = async () => {
+        const result = await axios(
+          BackendURL("prizeclasses/"),
+        );
+        setData(result.data);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-          const result = await axios(
-            BackendURL("prizeclasses/"),
-          );
-          setData(result.data);
-        };
         fetchData();
-      }, []);
+    }, []);
 
     return (
         <Container>
@@ -51,7 +59,9 @@ export function Shop(props) {
             </Row>
             {data.map(item => {
                 return (
-                    <ShopItem key={item.id} item={item} auth={props.auth} />
+                    <ShopItem key={item.id} item={item}
+                        auth={props.auth}
+                        onChange={fetchData}/>
                 );
             })}
         </Container>
