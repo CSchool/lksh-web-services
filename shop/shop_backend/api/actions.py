@@ -54,21 +54,26 @@ class PayTokensView(views.APIView):
 
     def post(self, request, format=None):
         if request.user.is_staff:
-            if request.user.pk == request.data["user"]:
-                return Response({"error":"can't pay to yourself"}, status=status.HTTP_400_BAD_REQUEST)
             with transaction.atomic():
-                profile = models.Profile.objects.select_for_update(). \
-                    get(user=request.user)
-                user_profile = models.Profile.objects.select_for_update(). \
-                    get(user=request.data["user"])
                 tokens = request.data["tokens"]
-                if tokens > profile.tokens:
+                alltokens = 0
+                for user, tok in tokens.items():
+                    alltokens += tok
+                    user_id = int(user)
+                    if request.user.pk == user_id:
+                        return Response({"error":"can't pay to yourself"}, status=status.HTTP_400_BAD_REQUEST)
+                admin = models.Profile.objects.select_for_update(). \
+                    get(user=request.user)
+                if alltokens > admin.tokens:
                     return Response({"error":"not enough tokens"}, status=status.HTTP_400_BAD_REQUEST)
-                profile.tokens -= tokens
-                user_profile.tokens += tokens
-                profile.save()
-                user_profile.save()
-                models.TokenTransfer.create(profile.user, user_profile.user, tokens)
+                for user, tok in tokens.items():
+                    user_profile = models.Profile.objects.select_for_update(). \
+                        get(user=user)
+                    admin.tokens -= tok
+                    user_profile.tokens += tok
+                    admin.save()
+                    user_profile.save()
+                    models.TokenTransfer.create(admin.user, user_profile.user, tok)
             return Response({}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)

@@ -14,24 +14,24 @@ export default class Givetokens extends Component {
             users:[],
             user:0,
             group:0,
-            username:"",
-            tokens: 0,
+            tokens: {},
         };
     }
 
-    handleTokensChange = (event) => {
+    handleTokensChange = (event, user) => {
         var v = event.target.value;
         if (/^[0-9]+$/.test(v))
             v = Number(v);
         else
             v = '';
-        this.setState({tokens: v});
+        var tokens = this.state.tokens;
+        tokens[user] = v;
+        this.setState({tokens: tokens});
     }
 
     handleSend = () => {
-        postBackend("pay/", {}, {user:this.state.user, tokens:this.state.tokens},
+        postBackend("pay/", {}, {tokens:this.state.tokens},
             () => {
-                this.setState({tokens:0});
                 this.handleUpdate();
                 this.props.auth.userRefresh(true);
             });
@@ -43,12 +43,13 @@ export default class Givetokens extends Component {
             filter = {group:this.state.group}
         fetchBackend('groups/', {},
             data => {
-                this.setState({ groups: data });
-            }
-        );
-        fetchBackend('users/', filter,
-            data => {
-                this.setState({ users: data });
+                this.setState({ groups: data },
+                    () => fetchBackend('users/', filter,
+                        data => {
+                            this.setState({ users: data, tokens: {}, user: 0 });
+                        }
+                    )
+                );
             }
         );
     };
@@ -57,7 +58,21 @@ export default class Givetokens extends Component {
         this.handleUpdate();
     }
 
+    getsum = () => {
+        var sum = 0;
+        for(var key in this.state.tokens) {
+            var v = this.state.tokens[key];
+            if (/^[0-9]+$/.test(v))
+                v = Number(v);
+            else
+                v = 0;
+            sum += v;
+        }
+        return sum;
+    }
+
     render() {
+        var sum = this.getsum();
         return (
             <Container>
                 <h2>{"Выдать баллы"}</h2>
@@ -66,7 +81,7 @@ export default class Givetokens extends Component {
                     <ListGroup.Item key={0}
                             active={this.state.group===0}
                             onClick={() => {
-                                this.setState({group:0, user:0, username:''},
+                                this.setState({group:0, user:0, username:'', tokens:{}},
                                     this.handleUpdate);
                             }}>
                         {"Все группы"}
@@ -75,47 +90,45 @@ export default class Givetokens extends Component {
                     <ListGroup.Item key={group.id}
                         active={this.state.group===group.id}
                         onClick={() => {
-                            this.setState({group:group.id, user:0, username:''},
+                            this.setState({group:group.id, user:0, username:'', tokens:{}},
                                 this.handleUpdate);
                         }}>
                         {group.name}
                     </ListGroup.Item>
                 )}
                 </ListGroup>
-                <h3>{"Ученик"}</h3>
+                <h3>{"Ученики"}</h3>
                 <ListGroup>
                 {this.state.users.map(user =>
                     <ListGroup.Item key={user.pk}
                         active={this.state.user===user.pk}
                         onClick={() => this.setState({user:user.pk, username:user.full_name})}>
-                        {user.full_name + ' (' + user.profile.tokens + ')'}
+                        <Row>
+                            <Col>{user.full_name + ' (' + user.profile.tokens + ')'}</Col>
+                            <Col><Form.Control type="number"
+                                value={this.state.tokens[user.pk] ? this.state.tokens[user.pk] : ''}
+                                onChange={(event) => this.handleTokensChange(event, user.pk)}/>
+                            </Col>
+                        </Row>
                     </ListGroup.Item>
                 )}
                 </ListGroup>
-                {this.state.user
-                    ? <Row className="align-items-center">
-                        <Col xs="auto" className="align-items-center">
-                            {"Пользователю " + this.state.username + " перевести "}
-                        </Col>
-                        <Col xs="auto">
-                            <Form.Control type="number"
-                                value={this.state.tokens}
-                                onChange={this.handleTokensChange}/>
-                        </Col>
-                        <Col xs="auto">
-                            <PausedButton pause={2}
-                                disabled={
-                                    !this.state.user
-                                    || this.state.user === this.props.auth.user_id
-                                    || this.state.tokens <= 0
-                                    || this.state.tokens > this.props.auth.tokens}
-                                onClick={this.handleSend}>
-                                {"OK"}
-                            </PausedButton>
-                        </Col>
-                     </Row>
-                    : ""
-                }
+                <Row className="align-items-center">
+                    <Col xs="auto" className="align-items-center">
+                        {"Раздать "}
+                        { sum }
+                        {" баллов"}
+                    </Col>
+                    <Col xs="auto">
+                        <PausedButton pause={2}
+                            disabled={
+                                sum <= 0
+                                || sum > this.props.auth.tokens}
+                            onClick={this.handleSend}>
+                            {"OK"}
+                        </PausedButton>
+                    </Col>
+                </Row>
             </Container>
         );
     }
