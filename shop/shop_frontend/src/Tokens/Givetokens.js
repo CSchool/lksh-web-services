@@ -47,7 +47,6 @@ export default class Givetokens extends Component {
         );
         fetchBackend('users/', filter,
             data => {
-                console.log(data);
                 this.setState({ users: data });
             }
         );
@@ -88,7 +87,7 @@ export default class Givetokens extends Component {
                     <ListGroup.Item key={user.pk}
                         active={this.state.user===user.pk}
                         onClick={() => this.setState({user:user.pk, username:user.full_name})}>
-                        {user.full_name}
+                        {user.full_name + ' (' + user.profile.tokens + ')'}
                     </ListGroup.Item>
                 )}
                 </ListGroup>
