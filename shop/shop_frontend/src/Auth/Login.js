@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { postBackend } from '../Backend/Backend'
+import Container from 'react-bootstrap/Container';
 
 export class Login extends Component {
   constructor(props) {
@@ -47,12 +48,10 @@ export class Login extends Component {
 
   render() {
     return (
-      <>
-        <div className="row">
-          <div className="page-header">
-            <h1>Log in</h1>
-          </div>
-        </div>
+      <Container>
+        <Row>
+            <h1>Вход в учётную запись</h1>
+        </Row>
         { this.state.alert
           && <Row>
                <Col>
@@ -65,7 +64,7 @@ export class Login extends Component {
         <form>
           <div className="form-group row">
             <label className="col-2 control-label" htmlFor="login">
-              Login
+              Имя
             </label>
             <div className="col-10">
               <input className="form-control" name="login" id="login"
@@ -75,7 +74,7 @@ export class Login extends Component {
             </div>
           </div>
           <div className="form-group row">
-            <label className="col-2 control-label" htmlFor="password">Password</label>
+            <label className="col-2 control-label" htmlFor="password">Пароль</label>
             <div className="col-10">
               <input className="form-control" type="password"
                      value={this.state.password}
@@ -87,12 +86,12 @@ export class Login extends Component {
           <div className="form-group row">
             <div className="offset-2 col-10">
               <Button variant="primary" onClick={this.handleSubmit}>
-                Log in
+                Войти
               </Button>
             </div>
           </div>
         </form>
-      </>
+      </Container>
     );
   }
 }
