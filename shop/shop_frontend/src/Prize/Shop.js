@@ -1,4 +1,4 @@
-import { BackendURL, fetchBackend, postBackend } from '../Backend/Backend';
+import { BackendURL, postBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
