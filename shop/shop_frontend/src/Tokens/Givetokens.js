@@ -32,6 +32,7 @@ export default class Givetokens extends Component {
         postBackend("pay/", {}, {user:this.state.user, tokens:this.state.tokens},
             () => {
                 this.setState({tokens:0});
+                this.handleUpdate();
                 this.props.auth.userRefresh(true);
             });
     }
