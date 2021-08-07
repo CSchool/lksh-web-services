@@ -49,6 +49,7 @@ class PrizeClassSerializer(serializers.ModelSerializer):
 
 class PrizeItemSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='info.name')
+    class_id = serializers.ReadOnlyField(source='info.id')
     picture = serializers.ImageField(source='info.picture')
     full_name = serializers.SerializerMethodField()
 
@@ -58,7 +59,7 @@ class PrizeItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrizeItem
         fields = ['id', 'name', 'date_purchased', 'date_taken',
-                  'price', 'full_name', 'picture']
+                  'price', 'full_name', 'picture', 'class_id']
 
 class TokenTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.ReadOnlyField(source='from_user.username')

@@ -40,4 +40,5 @@ urlpatterns = [
    path('buy/', actions.BuyPrizeView.as_view(), name='buyprize'),
    path('pay/', actions.PayTokensView.as_view(), name='paytokens'),
    path('give/', actions.GivePrizeView.as_view(), name='giveprize'),
+   path('undo/', actions.UndoPrizeView.as_view(), name='undoprize'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -22,7 +22,7 @@ export default function ShopItem(props) {
 
     useEffect(() => {
         fetchData();
-    });
+    }, []);
 
     if (!data || !data.id)
         return "";

@@ -49,6 +49,29 @@ class GivePrizeView(views.APIView):
         else:
             return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
 
+class UndoPrizeView(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        if request.user.is_staff:
+            with transaction.atomic():
+                prizeItem = models.PrizeItem.objects. \
+                    select_for_update().get(pk=request.data["id"])
+                prize = models.PrizeClass.objects. \
+                    select_for_update().get(pk=prizeItem.info.id)
+                profile = models.Profile.objects.select_for_update(). \
+                    get(user=prizeItem.owner)
+                if prizeItem.date_taken:
+                    return Response({"error":"already taken"}, status=status.HTTP_400_BAD_REQUEST)
+                profile.tokens += prizeItem.price
+                profile.save()
+                prize.count += 1
+                prize.save()
+                prizeItem.delete()
+            return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
+
 class PayTokensView(views.APIView):
     permission_classes = [permissions.IsAdminUser]
 

@@ -3,8 +3,6 @@ import ItemList from './ItemList';
 
 export default function OwnPrizes(props) {
     return (
-        <ItemList auth={props.auth}
-            showTaken
-        />
+        <ItemList auth={props.auth} showTaken/>
     );
 }
