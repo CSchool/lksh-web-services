@@ -13,7 +13,7 @@ export default class PausedButton extends Component {
     }
 
     handleClick = (event) => {
-        if (this.state.disabled) {
+        if (!window.confirm("Вы уверены?")) {
             return;
         }
         this.setState({disabled: true},
