@@ -54,6 +54,8 @@ class PayTokensView(views.APIView):
 
     def post(self, request, format=None):
         if request.user.is_staff:
+            if request.user.pk == request.data["user"]:
+                return Response({"error":"can't pay to yourself"}, status=status.HTTP_400_BAD_REQUEST)
             with transaction.atomic():
                 profile = models.Profile.objects.select_for_update(). \
                     get(user=request.user)

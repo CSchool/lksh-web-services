@@ -4,6 +4,7 @@ import NavbarMain from './Navbar/Main';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
+import ShopItem from './Prize/ShopItem';
 import Giveaway from './Prize/Giveaway';
 import Owned from './Prize/Owned';
 import Givetokens from './Tokens/Givetokens';
@@ -91,6 +92,8 @@ class App extends Component {
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
                             <AppliedRoute path="/" exact component={Shop}
+                                props={childProps} />
+                            <AppliedRoute path="/shopitem/:id" exact component={ShopItem}
                                 props={childProps} />
                             <AppliedRoute path="/giveaway" exact component={Giveaway}
                                 props={childProps} />

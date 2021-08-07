@@ -106,6 +106,7 @@ export default class Givetokens extends Component {
                             <PausedButton pause={2}
                                 disabled={
                                     !this.state.user
+                                    || this.state.user === this.props.auth.user_id
                                     || this.state.tokens <= 0
                                     || this.state.tokens > this.props.auth.tokens}
                                 onClick={this.handleSend}>
