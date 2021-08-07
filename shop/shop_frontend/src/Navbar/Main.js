@@ -8,7 +8,7 @@ function NavLink(props) {
         return <div />;
     return (
         <Nav.Item>
-            <Nav.Link href={props.link}>
+            <Nav.Link href={props.link} onClick={props.onClick}>
                 {props.text}
             </Nav.Link>
         </Nav.Item>
@@ -44,7 +44,8 @@ class NavbarMain extends Component {
                         <NavLink link="/prizes" text="Мои призы"
                             show={this.props.auth.isAuthenticated && !this.props.auth.is_staff} />
                         <NavLink link="#" text="Выйти"
-                            show={this.props.auth.isAuthenticated} />
+                            show={this.props.auth.isAuthenticated}
+                            onClick={this.handleLogout} />
                         <NavLink link="/login" text="Войти"
                             show={!this.props.auth.isAuthenticated} />
                     </Nav>

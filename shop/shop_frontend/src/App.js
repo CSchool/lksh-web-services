@@ -62,9 +62,8 @@ class App extends Component {
 
     userRefresh = authenticated => {
         if (!authenticated) {
-            postBackend('auth/logout/')
-                .catch(error => {})
-                .finally(() => this.logout());
+            postBackend('auth/logout/', {}, {},
+                () => this.logout);
         } else {
             this.loadSession();
         }
