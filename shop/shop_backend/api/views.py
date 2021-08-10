@@ -7,17 +7,20 @@ from .serializers import UserSerializer, GroupSerializer, \
     PrizeClassSerializer, PrizeItemSerializer, TokenTransferSerializer
 from .permissions import IsGetOrIsAdmin
 
-class UserListView(generics.ListAPIView):
+class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
     serializer_class = UserSerializer
+    queryset = User.objects.all()
 
-    def get_queryset(self):
+    def list(self, request):
         queryset = User.objects.all()
         group = self.request.query_params.get("group")
         if group:
             queryset = queryset.filter(groups=group)
         queryset.order_by("last_name")
-        return queryset
+        serializer = UserSerializer(queryset, context={"request": 
+                        request}, many=True)
+        return Response(serializer.data)
 
 class GroupListView(generics.ListAPIView):
     queryset = Group.objects.all()

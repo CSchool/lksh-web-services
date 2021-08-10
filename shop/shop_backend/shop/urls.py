@@ -25,6 +25,7 @@ from api import actions
 router = routers.DefaultRouter()
 router.register(r'prizeclasses', views.PrizeClassViewSet)
 router.register(r'tokentransfers', views.TokenTransferViewSet)
+router.register(r'users', views.UserViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -35,7 +36,6 @@ urlpatterns = [
    path('auth/', include('dj_rest_auth.urls')),
    path('user/', views.CurrentUserView.as_view(), name='currentuser'),
    path('prizeitems/', views.PrizeItemList.as_view(), name='prizeitems'),
-   path('users/', views.UserListView.as_view(), name='users'),
    path('groups/', views.GroupListView.as_view(), name='groups'),
    path('buy/', actions.BuyPrizeView.as_view(), name='buyprize'),
    path('pay/', actions.PayTokensView.as_view(), name='paytokens'),
