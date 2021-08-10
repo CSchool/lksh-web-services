@@ -4,6 +4,7 @@ import NavbarMain from './Navbar/Main';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
+import News from './Blog/News';
 import ShopItem from './Prize/ShopItem';
 import UserList from './Users/UserList';
 import UserInfo from './Users/UserInfo';
@@ -92,7 +93,9 @@ class App extends Component {
                 <Router childProps={childProps}>
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
-                            <AppliedRoute path="/" exact component={Shop}
+                            <AppliedRoute path="/" exact component={News}
+                                props={childProps} />
+                            <AppliedRoute path="/shop" exact component={Shop}
                                 props={childProps} />
                             <AppliedRoute path="/shopitem/:id" exact component={ShopItem}
                                 props={childProps} />

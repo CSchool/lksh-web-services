@@ -41,4 +41,8 @@ urlpatterns = [
    path('pay/', actions.PayTokensView.as_view(), name='paytokens'),
    path('give/', actions.GivePrizeView.as_view(), name='giveprize'),
    path('undo/', actions.UndoPrizeView.as_view(), name='undoprize'),
+   path('posts/', views.PostList.as_view()),
+   path('posts/<int:pk>/', views.PostDetail.as_view()),
+   path('comments/', views.CommentList.as_view()),
+   path('comments/<int:pk>/', views.CommentDetail.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,7 +8,7 @@ import { ShopItemLink } from '../Controls/Links';
 
 function ShopLine(props) {
     return (
-        <Row>
+        <Row className="mt-3">
             <Col xs={2}><img src={props.item.picture} width={128}/></Col>
             <Col xs={2}><ShopItemLink id={props.item.id} text={props.item.name}/></Col>
             <Col xs={4}>{props.item.description}</Col>

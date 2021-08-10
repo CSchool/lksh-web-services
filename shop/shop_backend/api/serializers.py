@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
-from api.models import Profile, PrizeClass, PrizeItem, TokenTransfer
+from api import models
 from dj_rest_auth.serializers import UserDetailsSerializer
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = models.Profile
         fields = ('tokens','picture',)
 
 class UserSerializer(UserDetailsSerializer):
@@ -39,7 +39,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class PrizeClassSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PrizeClass
+        model = models.PrizeClass
         fields = ['id', 'name', 'description', 'price', 'count', 'picture']
 
     # def get_photo_url(self, obj):
@@ -59,7 +59,7 @@ class PrizeItemSerializer(serializers.ModelSerializer):
         return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
 
     class Meta:
-        model = PrizeItem
+        model = models.PrizeItem
         fields = ['id', 'name', 'date_purchased', 'date_taken',
                   'price', 'full_name', 'picture', 'class_id',
                   'owner_picture', 'owner_id']
@@ -69,5 +69,23 @@ class TokenTransferSerializer(serializers.ModelSerializer):
     to_user = serializers.ReadOnlyField(source='to_user.username')
 
     class Meta:
-        model = TokenTransfer
+        model = models.TokenTransfer
         fields = ['id', 'count', 'created', 'from_user', 'to_user']
+
+class PostSerializer(serializers.ModelSerializer):
+    owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
+    owner_last_name = serializers.ReadOnlyField(source='owner.last_name')
+    owner_id = serializers.ReadOnlyField(source='owner.pk')
+
+    class Meta:
+        model = models.Post
+        fields = ['id', 'created', 'title', 'body', 'owner_first_name',
+                  'owner_last_name', 'owner_id']
+
+class CommentSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+    owner_id = serializers.ReadOnlyField(source='owner.pk')
+
+    class Meta:
+        model = models.Comment
+        fields = ['id', 'body', 'owner', 'post', 'owner_id']
