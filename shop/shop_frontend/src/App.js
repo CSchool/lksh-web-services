@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
 import News from './Blog/News';
+import ViewPost from './Blog/View';
 import ShopItem from './Prize/ShopItem';
 import UserList from './Users/UserList';
 import UserInfo from './Users/UserInfo';
@@ -94,6 +95,8 @@ class App extends Component {
                     <Suspense fallback={<div>Loading...</div>}>
                         <Switch>
                             <AppliedRoute path="/" exact component={News}
+                                props={childProps} />
+                            <AppliedRoute path="/post/:id" exact component={ViewPost}
                                 props={childProps} />
                             <AppliedRoute path="/shop" exact component={Shop}
                                 props={childProps} />

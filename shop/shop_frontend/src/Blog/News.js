@@ -10,7 +10,8 @@ function NewsLine(props) {
     return (
         <>
             <Row className="mt-5">
-                <Col xs={8}><h3>{props.item.title}</h3></Col>
+                <Col xs={8}><a href={"/post/" + props.item.id}>
+                    <h3>{props.item.title}</h3></a></Col>
                 <Col xs={2}><UserLink id={props.item.owner_id}
                     text={props.item.owner_first_name + " " + props.item.owner_last_name}/>
                 </Col>
