@@ -4,12 +4,13 @@ import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import PausedButton from '../Controls/PausedButton';
+import { ShopItemLink } from '../Controls/Links';
 
 function ShopLine(props) {
     return (
         <Row>
             <Col xs={2}><img src={props.item.picture} width={128}/></Col>
-            <Col xs={2}><a href={"shopitem/" + props.item.id}>{props.item.name}</a></Col>
+            <Col xs={2}><ShopItemLink id={props.item.id} text={props.item.name}/></Col>
             <Col xs={4}>{props.item.description}</Col>
             <Col xs={1}>{props.item.price}</Col>
             <Col xs={1}>{props.item.count}</Col>

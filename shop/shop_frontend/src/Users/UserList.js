@@ -2,6 +2,7 @@ import fetchBackend from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
+import { UserLink } from '../Controls/Links'
 
 function UsersLine(props) {
     return (
@@ -11,7 +12,7 @@ function UsersLine(props) {
                     ? <img src={props.item.profile.picture} width={128}/>
                     : ""}
             </Col>
-            <Col xs={3}><a href={"user/" + props.item.pk}>{props.item.full_name}</a></Col>
+            <Col xs={3}><UserLink id={props.item.pk} text={props.item.full_name}/></Col>
             <Col xs={1}>{props.item.profile.tokens}</Col>
         </Row>
     );

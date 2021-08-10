@@ -53,6 +53,7 @@ class PrizeItemSerializer(serializers.ModelSerializer):
     picture = serializers.ImageField(source='info.picture')
     full_name = serializers.SerializerMethodField()
     owner_picture = serializers.ImageField(source='owner.userprofile.picture')
+    owner_id = serializers.ReadOnlyField(source='owner.pk')
 
     def get_full_name(self, obj):
         return '{} {}'.format(obj.owner.first_name, obj.owner.last_name)
@@ -61,7 +62,7 @@ class PrizeItemSerializer(serializers.ModelSerializer):
         model = PrizeItem
         fields = ['id', 'name', 'date_purchased', 'date_taken',
                   'price', 'full_name', 'picture', 'class_id',
-                  'owner_picture']
+                  'owner_picture', 'owner_id']
 
 class TokenTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.ReadOnlyField(source='from_user.username')
