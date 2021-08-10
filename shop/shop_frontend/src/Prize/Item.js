@@ -10,9 +10,15 @@ export default function PrizeItem(props) {
     return (
         <Row>
             <Col xs={2}><img src={props.item.picture} width={128}/></Col>
-            <Col xs={2}><a href={"shopitem/" + props.item.class_id}>{props.item.name}</a></Col>
+            <Col xs={1}><a href={"shopitem/" + props.item.class_id}>{props.item.name}</a></Col>
+            <Col xs={2}>
+                {props.item.owner_picture
+                    ? <img src={props.item.owner_picture} width={128}/>
+                    : ""
+                }
+            </Col>
             <Col xs={2}>{props.item.full_name}</Col>
-            <Col xs={2}>{date.toLocaleDateString("ru") + " " + date.toLocaleTimeString("ru")}</Col>
+            <Col xs={1}>{date.toLocaleDateString("ru") + " " + date.toLocaleTimeString("ru")}</Col>
             {props.showTaken && dateTaken
                 && <Col xs={2}>{dateTaken}</Col>
                 //: <div/>

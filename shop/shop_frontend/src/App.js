@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
 import ShopItem from './Prize/ShopItem';
+import UserList from './Users/UserList';
 import Giveaway from './Prize/Giveaway';
 import Owned from './Prize/Owned';
 import Givetokens from './Tokens/Givetokens';
@@ -99,6 +100,8 @@ class App extends Component {
                             <AppliedRoute path="/givetokens" exact component={Givetokens}
                                 props={childProps} />
                             <AppliedRoute path="/prizes" exact component={Owned}
+                                props={childProps} />
+                            <AppliedRoute path="/users" exact component={UserList}
                                 props={childProps} />
                             <AppliedRoute path="/login" exact component={Login}
                                 props={childProps} />

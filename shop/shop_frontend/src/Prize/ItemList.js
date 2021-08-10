@@ -20,9 +20,10 @@ export default function ItemList(props) {
         <Container>
             <Row>
                 <Col xs={2}></Col>
-                <Col xs={2}>{"Приз"}</Col>
+                <Col xs={1}>{"Приз"}</Col>
+                <Col xs={2}></Col>
                 <Col xs={2}>{"Получатель"}</Col>
-                <Col xs={2}>{"Дата"}</Col>
+                <Col xs={1}>{"Дата"}</Col>
                 {props.showTaken
                     ? <Col xs={2}>{"Получено"}</Col>
                     : <div/>

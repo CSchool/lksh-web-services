@@ -37,6 +37,8 @@ class NavbarMain extends Component {
                         }
                     <Nav>
                         <NavLink link="/" text="Магазин" show />
+                        <NavLink link="/users" text="Пользователи"
+                            show={this.props.auth.is_staff} />
                         <NavLink link="/givetokens" text="Выдать баллы"
                             show={this.props.auth.is_staff} />
                         <NavLink link="/giveaway" text="Выдать призы"
