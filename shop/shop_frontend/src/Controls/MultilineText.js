@@ -1,4 +1,4 @@
 
 export function MultilineText(props) {
-    return props.text.split('\n').map(str => <p>{str}</p>);
+    return props.text.split('\n').map((str, idx) => <p key={idx}>{str}</p>);
 }

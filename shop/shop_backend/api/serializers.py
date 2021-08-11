@@ -50,9 +50,9 @@ class PrizeClassSerializer(serializers.ModelSerializer):
 class PrizeItemSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source='info.name')
     class_id = serializers.ReadOnlyField(source='info.id')
-    picture = serializers.ImageField(source='info.picture')
+    picture = serializers.ImageField(source='info.picture', read_only=True)
     full_name = serializers.SerializerMethodField()
-    owner_picture = serializers.ImageField(source='owner.userprofile.picture')
+    owner_picture = serializers.ImageField(source='owner.userprofile.picture', read_only=True)
     owner_id = serializers.ReadOnlyField(source='owner.pk')
 
     def get_full_name(self, obj):
@@ -76,16 +76,23 @@ class PostSerializer(serializers.ModelSerializer):
     owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
     owner_last_name = serializers.ReadOnlyField(source='owner.last_name')
     owner_id = serializers.ReadOnlyField(source='owner.pk')
+    comment_count = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Post
         fields = ['id', 'created', 'title', 'body', 'owner_first_name',
-                  'owner_last_name', 'owner_id']
+                  'owner_last_name', 'owner_id', 'comment_count']
+
+    def get_comment_count(self, obj):
+        return obj.comments.count()
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.full_name')
     owner_id = serializers.ReadOnlyField(source='owner.pk')
+    owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
+    owner_last_name = serializers.ReadOnlyField(source='owner.last_name')
+    owner_picture = serializers.ImageField(source='owner.userprofile.picture', read_only=True)
 
     class Meta:
         model = models.Comment
-        fields = ['id', 'body', 'owner', 'post', 'owner_id']
+        fields = ['id', 'body', 'post', 'created', 'owner_id',
+                  'owner_first_name', 'owner_last_name', 'owner_picture']

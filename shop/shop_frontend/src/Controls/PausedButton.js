@@ -13,7 +13,7 @@ export default class PausedButton extends Component {
     }
 
     handleClick = (event) => {
-        if (!window.confirm("Вы уверены?")) {
+        if (this.props.confirm && !window.confirm("Вы уверены?")) {
             return;
         }
         this.setState({disabled: true},
@@ -39,11 +39,13 @@ export default class PausedButton extends Component {
 PausedButton.defaultProps = {
     pause: 10,
     disabled: false,
+    confirm: true,
 }
 
 PausedButton.propTypes = {
     pause: PropTypes.number,
     disabled: PropTypes.bool,
+    confirm: PropTypes.bool,
     variant: PropTypes.string,
     onClick: PropTypes.func,
 }

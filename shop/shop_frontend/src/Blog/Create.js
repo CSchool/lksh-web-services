@@ -3,8 +3,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import fetchBackend, { postBackend } from '../Backend/Backend'
 import { Container } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 export default class PostCreate extends Component {
     constructor(props) {

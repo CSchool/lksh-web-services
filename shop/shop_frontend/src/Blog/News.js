@@ -13,13 +13,16 @@ function NewsLine(props) {
             <Row className="mt-5">
                 <Col xs={8}><a href={"/post/" + props.item.id}>
                     <h3>{props.item.title}</h3></a></Col>
-                <Col xs={2}><UserLink id={props.item.owner_id}
+                <Col xs="auto"><UserLink id={props.item.owner_id}
                     text={props.item.owner_first_name + " " + props.item.owner_last_name}/>
                 </Col>
-                <Col xs={2}>{FormatDate(props.item.created)}</Col>
+                <Col xs="auto">{FormatDate(props.item.created)}</Col>
             </Row>
             <Row>
                 <Col xs={12}><MultilineText text={props.item.body} /></Col>
+            </Row>
+            <Row>
+                <Col>{"Комментариев: "}{props.item.comment_count}</Col>
             </Row>
         </>
     );
