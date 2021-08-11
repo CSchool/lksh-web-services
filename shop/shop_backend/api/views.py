@@ -12,7 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
 
     def list(self, request):
-        queryset = User.objects.all()
+        queryset = models.User.objects.all()
         group = self.request.query_params.get("group")
         if group:
             queryset = queryset.filter(groups=group)
