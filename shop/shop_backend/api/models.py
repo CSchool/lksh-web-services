@@ -88,7 +88,7 @@ class Post(models.Model):
     owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
 
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -97,4 +97,4 @@ class Comment(models.Model):
     post = models.ForeignKey('Post', related_name='comments', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']

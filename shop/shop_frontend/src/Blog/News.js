@@ -1,10 +1,11 @@
-import { BackendURL, postBackend } from '../Backend/Backend';
+import { fetchBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { UserLink } from '../Controls/Links';
 import { FormatDate } from '../Utils/Utils';
+import Button from 'react-bootstrap/Button'
+import { MultilineText } from '../Controls/MultilineText';
 
 function NewsLine(props) {
     return (
@@ -18,7 +19,7 @@ function NewsLine(props) {
                 <Col xs={2}>{FormatDate(props.item.created)}</Col>
             </Row>
             <Row>
-                <Col xs={12}>{props.item.body}</Col>
+                <Col xs={12}><MultilineText text={props.item.body} /></Col>
             </Row>
         </>
     );
@@ -27,12 +28,9 @@ function NewsLine(props) {
 export default function News(props) {
     const [data, setData] = useState([]);
 
-    const fetchData = async () => {
-        const result = await axios(
-          BackendURL("posts/"),
-        );
-        setData(result.data);
-    };
+    const fetchData = () => {
+        fetchBackend("posts/", {}, setData);
+    }
 
     useEffect(() => {
         fetchData();
@@ -41,6 +39,10 @@ export default function News(props) {
     return (
         <Container>
             <h2>{"Новости и объявления"}</h2>
+            {props.auth.isAuthenticated
+                ? <Button type="link" href="/newpost">{"Новое объявление"}</Button>
+                : ""
+            }
             {data.map(item => {
                 return (
                     <NewsLine key={item.id} item={item}

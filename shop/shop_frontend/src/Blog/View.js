@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { FormatDate } from '../Utils/Utils';
+import { MultilineText } from '../Controls/MultilineText';
 
 export default function ViewPost(props) {
     const [data, setData] = useState([]);
@@ -27,7 +28,7 @@ export default function ViewPost(props) {
                 <Col>{FormatDate(data.created)}</Col>
             </Row>
             <Row className="mt-3">
-                <Col>{data.body}</Col>
+                <Col><MultilineText text={data.body} /></Col>
             </Row>
         </Container>
     );

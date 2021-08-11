@@ -6,6 +6,7 @@ import fetchBackend, { postBackend } from './Backend/Backend';
 import Shop from './Prize/Shop';
 import News from './Blog/News';
 import ViewPost from './Blog/View';
+import NewPost from './Blog/Create';
 import ShopItem from './Prize/ShopItem';
 import UserList from './Users/UserList';
 import UserInfo from './Users/UserInfo';
@@ -97,6 +98,8 @@ class App extends Component {
                             <AppliedRoute path="/" exact component={News}
                                 props={childProps} />
                             <AppliedRoute path="/post/:id" exact component={ViewPost}
+                                props={childProps} />
+                            <AppliedRoute path="/newpost" exact component={NewPost}
                                 props={childProps} />
                             <AppliedRoute path="/shop" exact component={Shop}
                                 props={childProps} />
