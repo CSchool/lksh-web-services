@@ -7,11 +7,11 @@ import { FormatDate } from '../Utils/Utils';
 export default function PrizeItem(props) {
     return (
         <Row className="mt-3">
-            <Col xs={2}><img src={props.item.picture} width={128}/></Col>
+            <Col xs={2}><img src={props.item.picture} style={{maxWidth:128,}/></Col>
             <Col xs={1}><ShopItemLink id={props.item.class_id} text={props.item.name}/></Col>
             <Col xs={2}>
                 {props.item.owner_picture
-                    ? <img src={props.item.owner_picture} width={128}/>
+                    ? <img src={props.item.owner_picture} style={{maxWidth:128,}/>
                     : ""
                 }
             </Col>

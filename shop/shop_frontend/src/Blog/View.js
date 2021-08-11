@@ -12,7 +12,7 @@ function Comment(props) {
         <Row>
             <Col xs="auto">
                 <Row className="mt-1">
-                <img src={props.comment.owner_picture} width={128}/>
+                <img src={props.comment.owner_picture} style={{maxWidth:128,}}/>
                 </Row>
                 <Row className="mt-1">
                 <Col xs="auto">{props.comment.owner_first_name + " " + props.comment.owner_last_name}</Col>
