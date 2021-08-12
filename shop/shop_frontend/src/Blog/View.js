@@ -6,6 +6,7 @@ import { FormatDate } from '../Utils/Utils';
 import { MultilineText } from '../Controls/MultilineText';
 import Form from 'react-bootstrap/Form';
 import PausedButton from '../Controls/PausedButton';
+import MessageBody from './MessageBody';
 
 function Comment(props) {
     return (
@@ -68,13 +69,7 @@ export default function ViewPost(props) {
     return (
         <Container>
             <h2>{post.title}</h2>
-            <Row className="mt-3">
-                <Col>{post.owner_first_name + " " + post.owner_last_name}</Col>
-                <Col>{FormatDate(post.created)}</Col>
-            </Row>
-            <Row className="mt-3">
-                <Col><MultilineText text={post.body} /></Col>
-            </Row>
+            <MessageBody {...post} />
             <h3>{"Комментарии"}</h3>
             {props.auth.isAuthenticated
                 ? <>
@@ -96,7 +91,7 @@ export default function ViewPost(props) {
                   </>
                 : ""
             }
-            {comments.map(c => <Comment key={c.id} comment={c} />)}
+            {comments.map(c => <MessageBody key={c.id} {...c} />)}
         </Container>
     );
 };

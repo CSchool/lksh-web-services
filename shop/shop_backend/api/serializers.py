@@ -76,12 +76,14 @@ class PostSerializer(serializers.ModelSerializer):
     owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
     owner_last_name = serializers.ReadOnlyField(source='owner.last_name')
     owner_id = serializers.ReadOnlyField(source='owner.pk')
+    owner_picture = serializers.ImageField(source='owner.userprofile.picture', read_only=True)
     comment_count = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Post
         fields = ['id', 'created', 'title', 'body', 'owner_first_name',
-                  'owner_last_name', 'owner_id', 'comment_count']
+                  'owner_last_name', 'owner_id', 'comment_count',
+                  'owner_picture']
 
     def get_comment_count(self, obj):
         return obj.comments.count()

@@ -2,10 +2,8 @@ import { fetchBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-import { UserLink } from '../Controls/Links';
-import { FormatDate } from '../Utils/Utils';
 import Button from 'react-bootstrap/Button'
-import { MultilineText } from '../Controls/MultilineText';
+import MessageBody from './MessageBody';
 
 function NewsLine(props) {
     return (
@@ -13,14 +11,8 @@ function NewsLine(props) {
             <Row className="mt-5">
                 <Col xs={8}><a href={"/post/" + props.item.id}>
                     <h3>{props.item.title}</h3></a></Col>
-                <Col xs="auto"><UserLink id={props.item.owner_id}
-                    text={props.item.owner_first_name + " " + props.item.owner_last_name}/>
-                </Col>
-                <Col xs="auto">{FormatDate(props.item.created)}</Col>
             </Row>
-            <Row>
-                <Col xs={12}><MultilineText text={props.item.body} /></Col>
-            </Row>
+            <MessageBody {...props.item} />
             <Row>
                 <Col>{"Комментариев: "}{props.item.comment_count}</Col>
             </Row>
