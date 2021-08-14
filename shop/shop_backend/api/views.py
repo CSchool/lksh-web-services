@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from rest_framework import generics, viewsets, views
+from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework.parsers import FileUploadParser
 from . import models
 from . import serializers
 from .permissions import IsGetOrIsAdmin, IsOwnerOrReadOnly
@@ -31,6 +32,27 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
     queryset = models.PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
     serializer_class = serializers.PrizeClassSerializer
     permission_classes = [IsGetOrIsAdmin]
+
+    # TODO: can't create prize with count=0
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            return Response({"error":"can't create many items"}, status=status.HTTP_400_BAD_REQUEST)
+        if not request.user.is_staff:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+        data = request.data
+        data['picture'] = request.data['file']
+        serializer = serializers.PrizeClassSerializer(data=data)
+        if not serializer.is_valid():
+            return Response({"error":"can't validate input"}, status=status.HTTP_400_BAD_REQUEST)
+        f = request.data['file']
+        prize = models.PrizeClass(**serializer.data)
+        prize.picture.save(f.name, f, save=True)
+        prize.save()
+        print(prize)
+        return Response({}, status=status.HTTP_201_CREATED)
 
     # def get(self, request, format=None):
     #     serializer = PrizeClassSerializer(queryset, context={"request": 

@@ -52,7 +52,7 @@ export function postBackend(page, params, form, func) {
             .then(data => { if (func) func(data); });
 }
 
-export function uploadBackend(page, params, file) {
+export function uploadBackend(page, params, file, func) {
     var csrftoken = getCookie('csrftoken');
     var form_data = new FormData();
     Object.entries(params).forEach(([key, value]) => form_data.append(key, value));
@@ -64,7 +64,9 @@ export function uploadBackend(page, params, file) {
                     "Access-Control-Allow-Credentials" : true,
                     "SameSite" : "Strict",
                     'X-CSRFToken': csrftoken
-                }});
+                }})
+            .then(response => response.json())
+            .then(data => { if (func) func(data); });
 }
 
 export default fetchBackend;

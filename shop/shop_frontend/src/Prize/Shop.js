@@ -5,6 +5,7 @@ import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import PausedButton from '../Controls/PausedButton';
 import { ShopItemLink } from '../Controls/Links';
+import Button from 'react-bootstrap/Button';
 
 function ShopLine(props) {
     return (
@@ -51,6 +52,10 @@ export default function Shop(props) {
     return (
         <Container>
             <h2>{"Магазин удивительных призов"}</h2>
+            {props.auth.is_staff
+                ? <Button href="/createprize">{"Добавить новый"}</Button>
+                : ""
+            }
             <Row>
                 <Col xs={2}></Col>
                 <Col xs={2}>{"Приз"}</Col>
