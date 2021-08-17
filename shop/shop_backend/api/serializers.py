@@ -24,7 +24,7 @@ class UserSerializer(UserDetailsSerializer):
         profile_instance = instance.userprofile
         profile_data = validated_data.pop('userprofile', {})
 
-        tokens = userprofile_data.get('tokens')
+        # tokens = userprofile_data.get('tokens')
 
         # update the userprofile fields
         profile_serializer.update(profile_instance, profile_data)

@@ -100,3 +100,18 @@ class PayTokensView(views.APIView):
             return Response({}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
+
+class UploadUserPhoto(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        if 'file' not in request.data or 'user' not in request.data:
+            raise ParseError("Empty content")
+        profile = models.Profile.objects.select_for_update().get(user=request.data['user'])
+        if profile is None:
+            return Response({"error":"can't find user"}, status=status.HTTP_400_BAD_REQUEST)
+        f = request.data['file']
+        profile.picture.save(f.name, f, save=True)
+        profile.save()
+
+        return Response({}, status=status.HTTP_201_CREATED)
