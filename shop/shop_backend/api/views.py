@@ -5,7 +5,7 @@ from rest_framework import permissions
 from rest_framework.parsers import FileUploadParser
 from . import models
 from . import serializers
-from .permissions import IsGetOrIsAdmin, IsOwnerOrReadOnly
+from .permissions import IsGetOrIsAdmin, IsOwnerOrAdminOrReadOnly
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAdminUser]
@@ -99,8 +99,7 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Post.objects.all()
     serializer_class = serializers.PostSerializer
-    permission_classes = [permissions.IsAdminUser,
-                          IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
 
 class CommentList(generics.ListCreateAPIView):
     queryset = models.Comment.objects.all()
@@ -123,5 +122,4 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Comment.objects.all()
     serializer_class = serializers.CommentSerializer
-    permission_classes = [permissions.IsAdminUser,
-                          IsOwnerOrReadOnly, ]
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
