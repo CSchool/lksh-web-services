@@ -2,18 +2,38 @@
 
 ## Установка
 
+### Frontend
+
+ cd shop/shop_frontend
+ npm run build
+
+ Настроить nginx (см. конфиг)
+
+ sudo rm -rf /var/www/html/*
+ sudo cp -r build/* /var/www/html/
+ sudo systemctl restart nginx
+
+### Backend
+
  cd shop
  python3 -m venv env
  . env/bin/activate
- pip install django djangorestframework django-cors-headers gunicorn Pillow
- pip freeze > requirements.txt
+ cd shop_backend
+ pip install -r requirements.txt
 
- python manage.py 
+Настроить БД
 
+ python manage.py migrate
+ python manage.py createsuperuser
 
+Запуск сервера
 
-TODO: docker
+ export DJANGO_ALLOWED_HOSTS="*"
+ export DJANGO_CORS_ORIGIN_WHITELIST="http://192.168.8.*"
+ export DJANGO_SECRET_KEY='xxx'
+ cd lksh-web-services/shop
+ . env/bin/activate
+ cd shop_backend
+ python manage.py runserver 0.0.0.0:8000
 
-Изменить docker-compose.yml
-
- docker-compose up
+TODO: Настроить nginx для backend
