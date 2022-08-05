@@ -9,7 +9,7 @@ function UsersLine(props) {
         <Row>
             <Col xs={2}>
                 {props.item.profile.picture
-                    ? <img src={props.item.profile.picture} style={{maxWidth:128,}}/>
+                    ? <img src={props.item.profile.picture} style={{maxWidth:128,}} alt=""/>
                     : ""}
             </Col>
             <Col xs={3}><UserLink id={props.item.pk} text={props.item.full_name}/></Col>

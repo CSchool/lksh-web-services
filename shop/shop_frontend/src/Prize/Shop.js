@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 function ShopLine(props) {
     return (
         <Row className="mt-3">
-            <Col xs={2}><img src={props.item.picture} style={{maxWidth:128,}}/></Col>
+            <Col xs={2}><img src={props.item.picture} style={{maxWidth:128,}} alt=""/></Col>
             <Col xs={2}><ShopItemLink id={props.item.id} text={props.item.name}/></Col>
             <Col xs={4}>{props.item.description}</Col>
             <Col xs={1}>{props.item.price}</Col>

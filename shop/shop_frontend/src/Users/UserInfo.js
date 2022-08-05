@@ -19,6 +19,7 @@ export default function UserInfo(props) {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     if (!data || !data.pk)
@@ -28,7 +29,7 @@ export default function UserInfo(props) {
         <Container>
             <h2>{"Пользователь "}{data.full_name}</h2>
             <Row>
-                <Col xs={6}><img src={data.profile.picture} style={{maxWidth:300,}}/></Col>
+                <Col xs={6}><img src={data.profile.picture} style={{maxWidth:300,}} alt=""/></Col>
             </Row>
             <Row>
                 <Col xs={6}>{"Баллы: "}{data.profile.tokens}</Col>

@@ -22,6 +22,7 @@ export default function ShopItem(props) {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     if (!data || !data.id)
@@ -31,7 +32,7 @@ export default function ShopItem(props) {
         <Container>
             <h2>{"Приз "}{data.name}</h2>
             <Row>
-                <Col xs={6}><img src={data.picture}/></Col>
+                <Col xs={6}><img src={data.picture} alt=""/></Col>
                 <Col xs={6}>{data.description}</Col>
             </Row>
             <Row>

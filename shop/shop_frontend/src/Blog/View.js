@@ -13,13 +13,13 @@ function Comment(props) {
         <Row>
             <Col xs="auto">
                 <Row className="mt-1">
-                <img src={props.comment.owner_picture} style={{maxWidth:128,}}/>
+                    <img src={props.comment.owner_picture} alt="" style={{maxWidth:128,}}/>
                 </Row>
                 <Row className="mt-1">
-                <Col xs="auto">{props.comment.owner_first_name + " " + props.comment.owner_last_name}</Col>
+                    <Col xs="auto">{props.comment.owner_first_name + " " + props.comment.owner_last_name}</Col>
                 </Row>
                 <Row className="mt-1">
-                <Col>{FormatDate(props.comment.created)}</Col>
+                    <Col>{FormatDate(props.comment.created)}</Col>
                 </Row>
             </Col>
             <Col>
@@ -61,6 +61,7 @@ export default function ViewPost(props) {
     useEffect(() => {
         fetchPost();
         fetchComments();
+        // eslint-disable-next-line
     }, []);
 
     if (!post || !post.id)
@@ -91,7 +92,7 @@ export default function ViewPost(props) {
                   </>
                 : ""
             }
-            {comments.map(c => <MessageBody key={c.id} {...c} />)}
+            {comments.map(c => <Comment key={c.id} comment={c} />)}
         </Container>
     );
 };

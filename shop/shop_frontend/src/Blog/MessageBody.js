@@ -9,7 +9,7 @@ export default function MessageBody(props) {
         <Row>
             <Col xs="auto">
                 <Row className="mt-1">
-                    <img src={props.owner_picture} style={{maxWidth:128,}}/>
+                    <img src={props.owner_picture} alt="" style={{maxWidth:128,}}/>
                 </Row>
                 <Row className="mt-1"><Col>
                     <UserLink id={props.owner_id}
