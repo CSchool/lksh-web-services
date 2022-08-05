@@ -13,6 +13,12 @@
  sudo cp -r build/* /var/www/html/
  sudo systemctl restart nginx
 
+#### Разработка
+
+ cd shop/shop_frontend
+ npm install
+ npm start
+
 ### Backend
 
  cd shop
@@ -37,3 +43,7 @@
  python manage.py runserver 0.0.0.0:8000
 
 TODO: Настроить nginx для backend
+
+
+## Разработка
+
