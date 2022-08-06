@@ -38,10 +38,10 @@ export function fetchBackend(page, params, func) {
         .then(data => { if (func) func(data); });
 }
 
-export function postBackend(page, params, form, func) {
+function backend(method, page, params, form, func) {
     var csrftoken = getCookie('csrftoken');
     return fetch(BackendURL(page, params),
-                 {method: 'POST', credentials: "include",
+                 {method: method, credentials: "include",
                   body: JSON.stringify(form),
                   headers: {
                     "Access-Control-Allow-Credentials" : true,
@@ -50,6 +50,14 @@ export function postBackend(page, params, form, func) {
                     'X-CSRFToken': csrftoken } } )
             .then(response => response.json())
             .then(data => { if (func) func(data); });
+}
+
+export function postBackend(page, params, form, func) {
+    return backend('POST', page, params, form, func);
+}
+
+export function patchBackend(page, params, form, func) {
+    return backend('PATCH', page, params, form, func);
 }
 
 export function uploadBackend(page, params, file, func) {

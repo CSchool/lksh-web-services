@@ -51,7 +51,6 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
         prize = models.PrizeClass(**serializer.data)
         prize.picture.save(f.name, f, save=True)
         prize.save()
-        print(prize)
         return Response({}, status=status.HTTP_201_CREATED)
 
     # def get(self, request, format=None):

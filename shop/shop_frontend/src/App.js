@@ -9,6 +9,7 @@ import ViewPost from './Blog/View';
 import NewPost from './Blog/Create';
 import ShopItem from './Prize/ShopItem';
 import PrizeCreate from './Prize/Create';
+import PrizeEdit from './Prize/Edit';
 import UserList from './Users/UserList';
 import UserInfo from './Users/UserInfo';
 import Giveaway from './Prize/Giveaway';
@@ -113,6 +114,8 @@ class App extends Component {
                             <AppliedRoute path="/prizes" exact component={Owned}
                                 props={childProps} />
                             <AppliedRoute path="/createprize" exact component={PrizeCreate}
+                                props={childProps} />
+                            <AppliedRoute path="/editprize/:id" exact component={PrizeEdit}
                                 props={childProps} />
                             <AppliedRoute path="/users" exact component={UserList}
                                 props={childProps} />

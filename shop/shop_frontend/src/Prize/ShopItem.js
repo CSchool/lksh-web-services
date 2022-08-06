@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import PausedButton from '../Controls/PausedButton';
+import Button from 'react-bootstrap/Button';
 
 export default function ShopItem(props) {
     const [data, setData] = useState([]);
@@ -49,6 +50,10 @@ export default function ShopItem(props) {
                         : ""
                     }
                 </Col>
+                {props.auth.is_staff
+                    ? <Col><Button href={"/editprize/" + data.id}>{"Редактировать"}</Button></Col>
+                    : ""
+                }
             </Row>
         </Container>
     );
