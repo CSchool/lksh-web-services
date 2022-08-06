@@ -24,7 +24,7 @@ class NavbarMain extends Component {
     render() {
         return (
             <Navbar bg="dark" variant="dark" expand="md">
-                 <Navbar.Brand href="/">{"ЛКШ 2022"}</Navbar.Brand>
+                 <Navbar.Brand href="/">{"ЛКШ " + new Date().getFullYear()}</Navbar.Brand>
                  <Navbar.Toggle />
 
                  <Navbar.Collapse className="justify-content-end">
