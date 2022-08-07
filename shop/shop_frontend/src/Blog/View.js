@@ -84,7 +84,8 @@ export default function ViewPost(props) {
                     </Form.Group>
                     <Form.Group as={Row} className="mt-3">
                         <Col>
-                            <PausedButton onClick={handleConfirm} confirm={false}>
+                            <PausedButton onClick={handleConfirm} confirm={false}
+                                disabled={comment===""}>
                                 {"Написать"}
                             </PausedButton>
                         </Col>
