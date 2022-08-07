@@ -1,8 +1,10 @@
 import React from 'react';
 import { Row, Col} from 'react-bootstrap';
 import { FormatDate } from '../Utils/Utils';
-import { MultilineText } from '../Controls/MultilineText';
 import { UserLink } from '../Controls/Links';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 
 export default function MessageBody(props) {
     return (
@@ -21,7 +23,7 @@ export default function MessageBody(props) {
             </Col>
             <Col>
             <Row className="mt-3">
-                <Col><MultilineText text={props.body} /></Col>
+                <Col><ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]}>{ props.body }</ReactMarkdown></Col>
             </Row>
             </Col>
         </Row>
