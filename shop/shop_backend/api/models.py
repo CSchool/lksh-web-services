@@ -83,8 +83,8 @@ class TokenTransfer(models.Model):
 
 class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=256, blank=True, default='')
-    body = models.TextField(blank=True, default='')
+    title = models.CharField(max_length=256, blank=False, default='xxx')
+    body = models.TextField(blank=False, default='xxx')
     owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)
 
     class Meta:

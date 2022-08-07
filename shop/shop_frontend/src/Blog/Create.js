@@ -49,7 +49,9 @@ export default class PostCreate extends Component {
                 </Form.Group>
                 <Form.Group as={Row} className="mt-3">
                     <Col>
-                        <Button onClick={this.handleConfirm}>
+                        <Button onClick={this.handleConfirm}
+                            disabled={this.state.body===""
+                                   || this.state.title===""}>
                             {"Создать"}
                         </Button>
                     </Col>
