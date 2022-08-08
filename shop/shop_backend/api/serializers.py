@@ -21,7 +21,7 @@ class UserSerializer(UserDetailsSerializer):
 
     def get_today_tokens(self, obj):
         today = datetime.datetime.now()
-        prev_day = today - datetime.timedelta(hours=12)
+        prev_day = today - datetime.timedelta(hours=2)
         return models.TokenTransfer.objects.all() \
                 .filter(to_user=obj.id,created__range=[prev_day, today]) \
                 .aggregate(sum=Sum('count'))['sum']
