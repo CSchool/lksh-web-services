@@ -80,7 +80,12 @@ class PayTokensView(views.APIView):
             with transaction.atomic():
                 tokens = request.data["tokens"]
                 alltokens = 0
-                for user, tok in tokens.items():
+                for user, tok_ in tokens.items():
+                    tok = 0
+                    try:
+                        tok = int(tok_)
+                    except:
+                        pass
                     alltokens += tok
                     user_id = int(user)
                     if request.user.pk == user_id:
@@ -89,7 +94,12 @@ class PayTokensView(views.APIView):
                     get(user=request.user)
                 if alltokens > admin.tokens:
                     return Response({"error":"not enough tokens"}, status=status.HTTP_400_BAD_REQUEST)
-                for user, tok in tokens.items():
+                for user, tok_ in tokens.items():
+                    tok = 0
+                    try:
+                        tok = int(tok_)
+                    except:
+                        pass
                     user_profile = models.Profile.objects.select_for_update(). \
                         get(user=user)
                     admin.tokens -= tok

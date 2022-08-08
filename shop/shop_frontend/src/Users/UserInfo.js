@@ -3,13 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import FileUploader from '../Controls/FileUploader';
+import { FormatDate } from '../Utils/Utils';
+import OwnPrizes from '../Prize/Owned';
 
 export default function UserInfo(props) {
     const [data, setData] = useState([]);
+    const [tokens, setTokens] = useState([]);
 
     const fetchData = () => {
         fetchBackend("users/" + props.match.params.id + "/", {},
             setData);
+        if (props.auth.is_staff) {
+            fetchBackend("tokentransfers/", {to:props.match.params.id},
+                setTokens);
+        }
     };
 
     const uploadPhoto = (file) => {
@@ -41,6 +48,22 @@ export default function UserInfo(props) {
                     : ""
                 }
             </Col></Row>
+            <h3>{"Получены призы"}</h3>
+            <OwnPrizes auth={props.auth} user={props.match.params.id}/>
+            {props.auth.is_staff
+                ? <>
+                    <h3>{"Начислены баллы"}</h3>
+                    <Row><Col xs={4}>{"Дата"}</Col><Col xs={2}>{"Сколько"}</Col><Col xs={4}>{"От кого"}</Col></Row>
+                    {tokens.map(token => {
+                        return (<Row key={token.id}>
+                            <Col xs={4}>{FormatDate(token.created)}</Col>
+                            <Col xs={2}>{token.count}</Col>
+                            <Col xs={4}>{token.from_user_full_name}</Col>
+                        </Row>);
+                    })}
+                  </>
+                : ""
+            }
         </Container>
     );
 }

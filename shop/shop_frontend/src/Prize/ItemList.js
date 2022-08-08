@@ -9,11 +9,12 @@ export default function ItemList(props) {
     const [data, setData] = useState([]);
 
     const fetchData = () => {
-        fetchBackend("prizeitems/", {}, setData);
+        fetchBackend("prizeitems/", props.user ? {owner:props.user} : {}, setData);
     };
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -21,11 +22,16 @@ export default function ItemList(props) {
             <Row>
                 <Col xs={2}></Col>
                 <Col xs={1}>{"Приз"}</Col>
-                <Col xs={2}></Col>
-                <Col xs={2}>{"Получатель"}</Col>
-                <Col xs={1}>{"Дата"}</Col>
+                {props.user==null
+                    ? <>
+                        <Col xs={2}>{"Получатель"}</Col>
+                        <Col xs={2}></Col>
+                      </>
+                    : ""
+                }
+                <Col xs={1}>{"Заказан"}</Col>
                 {props.showTaken
-                    ? <Col xs={2}>{"Получено"}</Col>
+                    ? <Col xs={2}>{"Получен"}</Col>
                     : <div/>
                 }
                 <Col xs={1}></Col>
@@ -53,6 +59,7 @@ export default function ItemList(props) {
                 return (
                     <PrizeItem key={item.id} item={item}
                         auth={props.auth}
+                        showUser={props.user==null}
                         showTaken={props.showTaken}
                         buttons={buttons}>
                     </PrizeItem>

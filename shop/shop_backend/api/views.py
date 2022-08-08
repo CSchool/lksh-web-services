@@ -63,14 +63,18 @@ class PrizeItemList(generics.ListAPIView):
 
     def get(self, request, format=None):
         if request.user.is_staff:
-            queryset = models.PrizeItem.objects.all().filter(date_taken__isnull=True)
-            serializer = serializers.PrizeItemSerializer(queryset, context={"request": 
-                         request}, many=True)
+            owner = self.request.query_params.get("owner")
+            if owner:
+                queryset = models.PrizeItem.objects.all().filter(owner=owner)
+            else:
+                queryset = models.PrizeItem.objects.all().filter(date_taken__isnull=True)
+            serializer = serializers.PrizeItemSerializer(queryset,
+                         context={"request": request}, many=True)
             return Response(serializer.data)
         elif request.user.is_authenticated:
             queryset = models.PrizeItem.objects.all().filter(owner=request.user)
-            serializer = serializers.PrizeItemSerializer(queryset, context={"request": 
-                         request}, many=True)
+            serializer = serializers.PrizeItemSerializer(queryset,
+                         context={"request": request}, many=True)
             return Response(serializer.data)
         else:
             return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
@@ -79,6 +83,17 @@ class TokenTransferViewSet(viewsets.ModelViewSet):
     queryset = models.TokenTransfer.objects.all()
     serializer_class = serializers.TokenTransferSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    def list(self, request):
+        queryset = models.TokenTransfer.objects.all()
+        to = self.request.query_params.get("to")
+        if to:
+            queryset = queryset.filter(to_user=to)
+        else:
+            return Response({"error":"user must be specified"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.TokenTransferSerializer(queryset, context={"request": 
+                        request}, many=True)
+        return Response(serializer.data)
 
 class CurrentUserView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]

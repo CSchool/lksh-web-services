@@ -104,7 +104,9 @@ export default class Givetokens extends Component {
                         active={this.state.user===user.pk}
                         onClick={() => this.setState({user:user.pk, username:user.full_name})}>
                         <Row>
-                            <Col>{user.full_name + ' (' + user.profile.tokens + ')'}</Col>
+                            <Col>{user.full_name + ' (' + user.profile.tokens + ')'}
+                            <span className="text-danger">{user.today_tokens ? " +" + user.today_tokens : ""}</span>
+                            </Col>
                             <Col><Form.Control type="number"
                                 value={this.state.tokens[user.pk] ? this.state.tokens[user.pk] : ''}
                                 onChange={(event) => this.handleTokensChange(event, user.pk)}/>

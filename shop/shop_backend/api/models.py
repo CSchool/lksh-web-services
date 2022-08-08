@@ -70,7 +70,7 @@ class TokenTransfer(models.Model):
     to_user = models.ForeignKey(User, related_name='tokens_from_users', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
 
     @classmethod
     def create(cls, from_user, to_user, tokens):

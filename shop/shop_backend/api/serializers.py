@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from api import models
 from dj_rest_auth.serializers import UserDetailsSerializer
+from django.db.models import Sum
+import datetime
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,12 +14,21 @@ class UserSerializer(UserDetailsSerializer):
     profile = ProfileSerializer(source="userprofile")
     is_staff = serializers.ReadOnlyField()
     full_name = serializers.SerializerMethodField()
+    today_tokens = serializers.SerializerMethodField()
 
     def get_full_name(self, obj):
         return '{} {}'.format(obj.first_name, obj.last_name)
 
+    def get_today_tokens(self, obj):
+        today = datetime.datetime.now()
+        prev_day = today - datetime.timedelta(hours=12)
+        return models.TokenTransfer.objects.all() \
+                .filter(to_user=obj.id,created__range=[prev_day, today]) \
+                .aggregate(sum=Sum('count'))['sum']
+
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('is_staff', 'profile', 'full_name')
+        fields = UserDetailsSerializer.Meta.fields + \
+            ('is_staff', 'profile', 'full_name', 'today_tokens')
 
     def update(self, instance, validated_data):
         profile_serializer = self.fields['profile']
@@ -67,10 +78,15 @@ class PrizeItemSerializer(serializers.ModelSerializer):
 class TokenTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.ReadOnlyField(source='from_user.username')
     to_user = serializers.ReadOnlyField(source='to_user.username')
+    from_user_full_name = serializers.SerializerMethodField()
+
+    def get_from_user_full_name(self, obj):
+        return '{} {}'.format(obj.from_user.first_name, obj.from_user.last_name)
 
     class Meta:
         model = models.TokenTransfer
-        fields = ['id', 'count', 'created', 'from_user', 'to_user']
+        fields = ['id', 'count', 'created', 'from_user', 'to_user',
+                'from_user_full_name']
 
 class PostSerializer(serializers.ModelSerializer):
     owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
