@@ -64,9 +64,13 @@ class PrizeItemList(generics.ListAPIView):
     def get(self, request, format=None):
         if request.user.is_staff:
             owner = self.request.query_params.get("owner")
+            taken = self.request.query_params.get("taken")
             if owner:
                 queryset = models.PrizeItem.objects.all().filter(owner=owner) \
                     .order_by("-date_taken")
+            elif taken:
+                queryset = models.PrizeItem.objects.all() \
+                    .order_by("-date_taken")[:100]
             else:
                 queryset = models.PrizeItem.objects.all().filter(date_taken__isnull=True)
             serializer = serializers.PrizeItemSerializer(queryset,

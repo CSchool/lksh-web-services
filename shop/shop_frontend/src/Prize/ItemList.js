@@ -9,7 +9,14 @@ export default function ItemList(props) {
     const [data, setData] = useState([]);
 
     const fetchData = () => {
-        fetchBackend("prizeitems/", props.user ? {owner:props.user} : {}, setData);
+        var params = {}
+        if (props.user) {
+            params.owner = props.user;
+        }
+        if (props.showTaken) {
+            params.taken = 1;
+        }
+        fetchBackend("prizeitems/", params, setData);
     };
 
     useEffect(() => {
