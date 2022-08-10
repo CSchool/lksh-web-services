@@ -4,7 +4,7 @@ import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import FileUploader from '../Controls/FileUploader';
 import { FormatDate } from '../Utils/Utils';
-import OwnPrizes from '../Prize/Owned';
+import Owned from '../Prize/Owned';
 
 export default function UserInfo(props) {
     const [data, setData] = useState([]);
@@ -38,9 +38,12 @@ export default function UserInfo(props) {
             <Row>
                 <Col xs={6}><img src={data.profile.picture} style={{maxWidth:300,}} alt=""/></Col>
             </Row>
-            <Row>
-                <Col xs={6}>{"Баллы: "}{data.profile.tokens}</Col>
-            </Row>
+            {props.auth.is_staff
+                ? <Row>
+                    <Col xs={6}>{"Баллы: "}{data.profile.tokens}</Col>
+                  </Row>
+                : ""
+            }
             <Row><Col>
                 {props.auth.is_staff
                     ? <FileUploader text={"Загрузить фото"}
@@ -48,10 +51,10 @@ export default function UserInfo(props) {
                     : ""
                 }
             </Col></Row>
-            <h3>{"Получены призы"}</h3>
-            <OwnPrizes auth={props.auth} user={props.match.params.id}/>
             {props.auth.is_staff
                 ? <>
+                    <h3>{"Получены призы"}</h3>
+                    <Owned auth={props.auth} user={props.match.params.id}/>
                     <h3>{"Начислены баллы"}</h3>
                     <Row><Col xs={4}>{"Дата"}</Col><Col xs={2}>{"Сколько"}</Col><Col xs={4}>{"От кого"}</Col></Row>
                     {tokens.map(token => {

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -8,11 +8,23 @@ from . import serializers
 from .permissions import IsGetOrIsAdmin, IsOwnerOrAdminOrReadOnly
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsGetOrIsAdmin]
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all()
 
+    # !!! breaks user picture retrieving for some reason
+    # def retrieve(self, request, pk=None):
+    #     queryset = models.User.objects.all()
+    #     user = get_object_or_404(self.queryset, pk=pk)
+    #     data = serializers.UserSerializer(user).data
+    #     if not request.user.is_staff:
+    #         data['profile']['tokens'] = None
+    #         data['today_tokens'] = None
+    #     return Response(data)
+
     def list(self, request):
+        if not request.user.is_staff:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
         queryset = models.User.objects.all()
         group = self.request.query_params.get("group")
         if group:

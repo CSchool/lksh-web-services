@@ -1,9 +1,9 @@
 import React from 'react';
 import ItemList from './ItemList';
 
-export default function OwnPrizes(props) {
+export default function Owned(props) {
     return (
         <ItemList auth={props.auth} showTaken
-            user={props.auth.is_staff ? null : props.user}/>
+            user={props.user}/>
     );
 }
