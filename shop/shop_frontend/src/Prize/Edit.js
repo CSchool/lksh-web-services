@@ -29,7 +29,11 @@ export default function PrizeEdit(props) {
             {name: name, description: description, price: price,
             count: count},
         () => {
-            props.history.push("/shopitem/" + props.match.params.id + "/");
+            if (count === 0 || count === "0") {
+                props.history.push("/shop/");
+            } else {
+                props.history.push("/shopitem/" + props.match.params.id + "/");
+            }
         });
     };
 
@@ -84,7 +88,7 @@ export default function PrizeEdit(props) {
                     <PausedButton onClick={saveItem}
                         disabled={name === ""
                             || description === ""
-                            || count <= 0
+                            || count < 0
                             || price <= 0}>
                         {"Сохранить"}
                     </PausedButton>
