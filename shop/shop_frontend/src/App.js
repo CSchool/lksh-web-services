@@ -17,6 +17,8 @@ import Owned from './Prize/Owned';
 import Givetokens from './Tokens/Givetokens';
 import AppliedRoute from "./AppliedRoute";
 import Login from './Auth/Login';
+import Games from './Games/Menu';
+import BullCow from './Games/BullCow';
 
 class NotFound extends Component {
     render() { return "Not found"; }
@@ -122,6 +124,11 @@ class App extends Component {
                             <AppliedRoute path="/user/:id" exact component={UserInfo}
                                 props={childProps} />
                             <AppliedRoute path="/login" exact component={Login}
+                                props={childProps} />
+                            {/* "Games" */}
+                            <AppliedRoute path="/games" exact component={Games}
+                                props={childProps} />
+                            <AppliedRoute path="/bullcow" exact component={BullCow}
                                 props={childProps} />
                             <Route component={NotFound} />
                         </Switch>
