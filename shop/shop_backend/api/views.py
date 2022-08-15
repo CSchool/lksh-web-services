@@ -80,6 +80,8 @@ class PrizeItemList(generics.ListAPIView):
             if owner:
                 queryset = models.PrizeItem.objects.all().filter(owner=owner) \
                     .order_by("-date_taken")
+                if taken:
+                    queryset = queryset.filter(date_taken__isnull=False)
             elif taken:
                 queryset = models.PrizeItem.objects.all() \
                     .filter(date_taken__isnull=False) \
