@@ -1,4 +1,4 @@
-import { fetchBackend, postBackend } from '../Backend/Backend';
+import { fetchBackend, postBackend, deleteBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -58,6 +58,13 @@ export default function ViewPost(props) {
             });
     }
 
+    const handleDelete = () => {
+        deleteBackend("posts/" + props.match.params.id + "/", {},
+            () => {
+                props.history.push("/");
+            });
+    }
+
     useEffect(() => {
         fetchPost();
         fetchComments();
@@ -71,6 +78,14 @@ export default function ViewPost(props) {
         <Container>
             <h2>{post.title}</h2>
             <MessageBody {...post} />
+            {props.auth.is_staff
+                ? <Row><Col>
+                    <PausedButton onClick={handleDelete}
+                        variant="outline-danger">
+                        {"Удалить запись"}
+                    </PausedButton>
+                  </Col></Row>
+                : ""}
             <h3>{"Комментарии"}</h3>
             {props.auth.isAuthenticated
                 ? <>

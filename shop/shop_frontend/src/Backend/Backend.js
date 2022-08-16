@@ -48,7 +48,7 @@ function backend(method, page, params, form, func) {
                     "SameSite" : "Strict",
                     "Content-Type": "application/json",
                     'X-CSRFToken': csrftoken } } )
-            .then(response => response.json())
+            .then(response => method === 'DELETE' ? "" : response.json())
             .then(data => { if (func) func(data); });
 }
 
@@ -58,6 +58,10 @@ export function postBackend(page, params, form, func) {
 
 export function patchBackend(page, params, form, func) {
     return backend('PATCH', page, params, form, func);
+}
+
+export function deleteBackend(page, params, func) {
+    return backend('DELETE', page, params, {}, func);
 }
 
 export function uploadBackend(page, params, file, func) {
