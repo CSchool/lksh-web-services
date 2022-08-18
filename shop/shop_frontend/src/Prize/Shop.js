@@ -53,7 +53,15 @@ export default function Shop(props) {
         <Container>
             <h2>{"Магазин удивительных призов"}</h2>
             {props.auth.is_staff
-                ? <Button href="/createprize">{"Добавить новый"}</Button>
+                ? <>
+                    <Row>
+                        <Col>
+                            {"Стоимость всего набора призов: "}
+                            {data.reduce((v, item) => (v + item.count * item.price), 0)}
+                        </Col>
+                    </Row>
+                    <Button href="/createprize">{"Добавить новый"}</Button>
+                  </>
                 : ""
             }
             <Row>
