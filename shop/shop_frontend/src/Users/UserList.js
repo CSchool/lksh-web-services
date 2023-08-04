@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import { UserLink } from '../Controls/Links'
+import Button from 'react-bootstrap/Button';
 
 function UsersLine(props) {
     return (
@@ -32,6 +33,12 @@ export default function UserList(props) {
     return (
         <Container>
             <h2>{"Пользователи"}</h2>
+            {props.auth.is_staff
+                ? <>
+                    <Button href="/createuser">{"Добавить пользователя"}</Button>
+                  </>
+                : ""
+            }
             <Row>
                 <Col xs={2}></Col>
                 <Col xs={3}>{"Имя"}</Col>

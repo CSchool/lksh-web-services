@@ -12,6 +12,7 @@ import PrizeCreate from './Prize/Create';
 import PrizeEdit from './Prize/Edit';
 import UserList from './Users/UserList';
 import UserInfo from './Users/UserInfo';
+import UserCreate from './Users/Create';
 import Giveaway from './Prize/Giveaway';
 import Owned from './Prize/Owned';
 import Givetokens from './Tokens/Givetokens';
@@ -122,6 +123,8 @@ class App extends Component {
                             <AppliedRoute path="/users" exact component={UserList}
                                 props={childProps} />
                             <AppliedRoute path="/user/:id" exact component={UserInfo}
+                                props={childProps} />
+                            <AppliedRoute path="/createuser" exact component={UserCreate}
                                 props={childProps} />
                             <AppliedRoute path="/login" exact component={Login}
                                 props={childProps} />

@@ -6,11 +6,29 @@ from rest_framework.parsers import FileUploadParser
 from . import models
 from . import serializers
 from .permissions import IsGetOrIsAdmin, IsOwnerOrAdminOrReadOnly
+from django.contrib.auth.models import User
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsGetOrIsAdmin]
     serializer_class = serializers.UserSerializer
     queryset = models.User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            return Response({"error":"can't create many items"}, status=status.HTTP_400_BAD_REQUEST)
+        if not request.user.is_staff:
+            return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
+        if 'username' not in request.data \
+            or 'password' not in request.data \
+            or 'first_name' not in request.data \
+            or 'last_name' not in request.data:
+            raise ParseError("Empty content")
+        data = request.data
+        user = User.objects.create_user(username=data['username'],
+                                        password=data['password'],
+                                        first_name=data['first_name'],
+                                        last_name=data['last_name'])
+        return Response({}, status=status.HTTP_201_CREATED)
 
     # !!! breaks user picture retrieving for some reason
     # def retrieve(self, request, pk=None):
