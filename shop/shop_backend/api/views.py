@@ -43,7 +43,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def list(self, request):
         if not request.user.is_staff:
             return Response({"error":"not admin"}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = models.User.objects.all()
+        queryset = models.User.objects.all().filter(is_active=True)
         group = self.request.query_params.get("group")
         if group:
             queryset = queryset.filter(groups=group)
