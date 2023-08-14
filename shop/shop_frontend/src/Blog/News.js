@@ -9,7 +9,7 @@ function NewsLine(props) {
     return (
         <>
             <Row className="mt-5">
-                <Col xs={8}><a href={"/post/" + props.item.id}>
+                <Col xs={8} style={{wordWrap:"break-word"}}><a href={"/post/" + props.item.id}>
                     <h3>{props.item.title}</h3></a></Col>
             </Row>
             <MessageBody {...props.item} />

@@ -16,16 +16,13 @@ export default function MessageBody(props) {
                 <Row className="mt-1"><Col>
                     <UserLink id={props.owner_id}
                         text={props.owner_first_name + " " + props.owner_last_name}/>
-                </Col></Row>
+                </Col>
+                </Row>
                 <Row className="mt-1">
                     <Col>{FormatDate(props.created)}</Col>
                 </Row>
             </Col>
-            <Col>
-            <Row className="mt-3">
-                <Col><ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]}>{ props.body }</ReactMarkdown></Col>
-            </Row>
-            </Col>
+            <Col style={{wordWrap:"break-word"}}><ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]}>{ props.body }</ReactMarkdown></Col>
         </Row>
     );
 }

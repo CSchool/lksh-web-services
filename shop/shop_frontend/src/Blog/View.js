@@ -24,7 +24,7 @@ function Comment(props) {
             </Col>
             <Col>
             <Row className="mt-3">
-                <Col><MultilineText text={props.comment.body} /></Col>
+                <Col style={{wordWrap:"break-word"}}><MultilineText text={props.comment.body} /></Col>
             </Row>
             </Col>
         </Row>
@@ -76,7 +76,7 @@ export default function ViewPost(props) {
 
     return (
         <Container>
-            <h2>{post.title}</h2>
+            <Row><Col style={{wordWrap:"break-word"}}><h2>{post.title}</h2></Col></Row>
             <MessageBody {...post} />
             {props.auth.is_staff
                 ? <Row><Col>
