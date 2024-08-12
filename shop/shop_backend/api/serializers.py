@@ -49,9 +49,23 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class PrizeClassSerializer(serializers.ModelSerializer):
+    user_bet = serializers.SerializerMethodField()
+
+    def get_user_bet(self, obj):
+        request = self._context.get('request')
+        if not request or not request.user.id:
+            return 0
+        user = request.user
+        req = models.AuctionRequest.objects. \
+            filter(user=user, prize=obj).first()
+        if req:
+            return req.maxprice
+        return 0
+
     class Meta:
         model = models.PrizeClass
-        fields = ['id', 'name', 'description', 'price', 'count', 'picture']
+        fields = ['id', 'name', 'description', 'price',
+                  'count', 'picture', 'auction', 'user_bet']
 
     # def get_photo_url(self, obj):
     #     request = self.context.get('request')

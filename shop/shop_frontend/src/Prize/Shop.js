@@ -1,11 +1,10 @@
-import { BackendURL, postBackend } from '../Backend/Backend';
+import { fetchBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-import PausedButton from '../Controls/PausedButton';
 import { ShopItemLink } from '../Controls/Links';
 import Button from 'react-bootstrap/Button';
+import BuyButton from './Buy';
 
 function ShopLine(props) {
     return (
@@ -15,22 +14,7 @@ function ShopLine(props) {
             <Col xs={4}>{props.item.description}</Col>
             <Col xs={1}>{props.item.price}</Col>
             <Col xs={1}>{props.item.count}</Col>
-            <Col xs={1}>
-                {props.auth.isAuthenticated
-                    && props.auth.tokens >= props.item.price
-                    ? <PausedButton
-                        onClick={() =>
-                            postBackend("buy/", {}, {id:props.item.id},
-                                () => {
-                                    if (props.onChange)
-                                        props.onChange();
-                                    props.auth.userRefresh(true);
-                                })
-                        }
-                        variant="outline-primary">{"Купить"}</PausedButton>
-                    : ""
-                }
-            </Col>
+            <Col xs={2}><BuyButton item={props.item} auth={props.auth} /></Col>
         </Row>
     );
 }
@@ -38,11 +22,8 @@ function ShopLine(props) {
 export default function Shop(props) {
     const [data, setData] = useState([]);
 
-    const fetchData = async () => {
-        const result = await axios(
-          BackendURL("prizeclasses/"),
-        );
-        setData(result.data);
+    const fetchData = () => {
+        fetchBackend("prizeclasses/", {}, setData);
     };
 
     useEffect(() => {

@@ -19,25 +19,17 @@
     sudo cp -r build/* /var/www/html/
     sudo systemctl restart nginx
 
-#### Разработка
-
-    cd shop/shop_frontend
-    npm install
-    npm start
-
 ### Backend
 
-    cd shop
+    cd shop/shop_backend
     python3 -m venv env
     . env/bin/activate
-    cd shop_backend
     pip install -r requirements.txt
 
 Активировать env
 
-    cd lksh-web-services/shop
+    cd lksh-web-services/shop/shop_backend
     . env/bin/activate
-    cd shop_backend
 
 Настроить переменные окружения (нужно для всех скриптов)
 
@@ -58,4 +50,16 @@ TODO: Настроить nginx для backend
 
 
 ## Разработка
+
+### Backend
+
+    cd lksh-web-services/shop/shop_backend
+    . env/bin/activate
+    python manage.py runserver 0.0.0.0:8000
+
+### Frontend
+
+    cd shop/shop_frontend
+    npm install
+    npm start
 

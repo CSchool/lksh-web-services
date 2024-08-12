@@ -15,14 +15,17 @@ export default class PrizeCreate extends Component {
             description:"",
             price: 0,
             count: 0,
+            auction: false,
             file: undefined,
         };
     }
 
     handleConfirm = event => {
+        console.log(this.state);
         uploadBackend('prizeclasses/', {name: this.state.name,
                 description: this.state.description, price: this.state.price,
-                count: this.state.count}, this.state.file,
+                count: this.state.count, auction: this.state.auction},
+                this.state.file,
             () => {
                 this.props.history.push("/shop");
             });
@@ -30,6 +33,11 @@ export default class PrizeCreate extends Component {
 
     handleInput = event => {
         this.setState({[event.target.id]: event.target.value});
+    }
+
+    handleAuction = event => {
+        this.setState({'auction': event.target.checked});
+        console.log(this.state);
     }
 
     render() {
@@ -67,6 +75,15 @@ export default class PrizeCreate extends Component {
                         <Form.Control type="number" id="count"
                             onChange={this.handleInput}
                             value={this.state.count}/>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mt-3">
+                    <Form.Label column xs="1">{"Аукцион"}</Form.Label>
+                    <Col>
+                        <Form.Check id="auction"
+                            onChange={this.handleAuction}
+                            value={this.state.auction}
+                            label="Аукцион"/>
                     </Col>
                 </Form.Group>
                 <Row className="mt-3">

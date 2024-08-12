@@ -22,11 +22,20 @@ class BuyPrizeView(views.APIView):
                     return Response({"error":"not enough tokens"}, status=status.HTTP_400_BAD_REQUEST)
                 if prize.count == 0:
                     return Response({"error":"not enough items"}, status=status.HTTP_400_BAD_REQUEST)
-                models.PrizeItem.create(prize, profile)
-                profile.tokens -= prize.price
-                prize.count -= 1
-                profile.save()
-                prize.save()
+                if prize.auction:
+                    maxprice = int(request.data["maxprice"])
+                    auction = models.AuctionRequest.objects.filter(prize=prize, user=profile.user).first()
+                    if auction:
+                        auction.maxprice = maxprice
+                        auction.save()
+                    else:
+                        models.AuctionRequest.objects.create(prize=prize, user=profile.user, maxprice=maxprice)
+                else:
+                    models.PrizeItem.create(prize, profile)
+                    profile.tokens -= prize.price
+                    prize.count -= 1
+                    profile.save()
+                    prize.save()
             return Response({}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)

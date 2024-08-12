@@ -63,8 +63,24 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PrizeClassSerializer
     permission_classes = [IsGetOrIsAdmin]
 
-    # TODO: can't create prize with count=0
+    def list(self, request):
+        if request.user.is_staff:
+            # don't query bets for admins
+            serializer = serializers.PrizeClassSerializer(self.queryset, many=True)
+        else:
+            serializer = serializers.PrizeClassSerializer(self.queryset,
+                                                          context={'request': request},
+                                                          many=True)
+        # queryset = models.User.objects.all().filter(is_active=True)
+        # group = self.request.query_params.get("group")
+        # if group:
+        #     queryset = queryset.filter(groups=group)
+        # queryset.order_by("last_name")
+        # serializer = serializers.UserSerializer(queryset, context={"request": 
+        #                 request}, many=True)
+        return Response(serializer.data)
 
+    # TODO: can't create prize with count=0
     def create(self, request, *args, **kwargs):
         if isinstance(request.data, list):
             return Response({"error":"can't create many items"}, status=status.HTTP_400_BAD_REQUEST)

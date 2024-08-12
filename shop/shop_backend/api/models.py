@@ -36,6 +36,7 @@ class PrizeClass(models.Model):
     price = models.IntegerField(_('price'),)
     count = models.IntegerField(_('count'),)
     picture = models.ImageField(upload_to='images/', null = True)
+    auction = models.BooleanField(default=False)
 
 class PrizeItem(models.Model):
     """
@@ -59,6 +60,14 @@ class PrizeItem(models.Model):
         item.price = prize.price
         item.save()
         return item
+
+class AuctionRequest(models.Model):
+    """
+    Auction request of the users.
+    """
+    maxprice = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    prize = models.ForeignKey(PrizeClass, on_delete=models.CASCADE, null=False)
 
 class TokenTransfer(models.Model):
     """
