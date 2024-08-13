@@ -64,13 +64,9 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
     permission_classes = [IsGetOrIsAdmin]
 
     def list(self, request):
-        if request.user.is_staff:
-            # don't query bets for admins
-            serializer = serializers.PrizeClassSerializer(self.queryset, many=True)
-        else:
-            serializer = serializers.PrizeClassSerializer(self.queryset,
-                                                          context={'request': request},
-                                                          many=True)
+        serializer = serializers.PrizeClassSerializer(self.queryset,
+                                                      context={'request': request},
+                                                      many=True)
         # queryset = models.User.objects.all().filter(is_active=True)
         # group = self.request.query_params.get("group")
         # if group:

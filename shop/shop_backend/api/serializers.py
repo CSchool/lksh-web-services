@@ -56,6 +56,9 @@ class PrizeClassSerializer(serializers.ModelSerializer):
         if not request or not request.user.id:
             return 0
         user = request.user
+        # don't query bets for admins
+        if user.is_staff:
+            return 0
         req = models.AuctionRequest.objects. \
             filter(user=user, prize=obj).first()
         if req:

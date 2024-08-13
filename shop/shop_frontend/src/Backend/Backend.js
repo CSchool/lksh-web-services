@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 function getCookie(name) {
     var cookieValue = null;
@@ -79,6 +80,18 @@ export function uploadBackend(page, params, file, func) {
                 }})
             .then(response => response.json())
             .then(data => { if (func) func(data); });
+}
+
+export async function fetchAsync(page) {
+    var csrftoken = getCookie('csrftoken');
+    return axios({url: BackendURL(page),
+        method: 'GET', withCredentials: true,
+        headers:{
+            "Access-Control-Allow-Credentials" : true,
+            "SameSite" : "Strict",
+            'X-CSRFToken': csrftoken
+        }}
+    );
 }
 
 export default fetchBackend;
