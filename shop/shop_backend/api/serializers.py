@@ -105,6 +105,17 @@ class TokenTransferSerializer(serializers.ModelSerializer):
         fields = ['id', 'count', 'created', 'from_user', 'to_user',
                 'from_user_full_name']
 
+class AuctionRequestSerializer(serializers.ModelSerializer):
+    user_first_name = serializers.ReadOnlyField(source='user.first_name')
+    user_last_name = serializers.ReadOnlyField(source='user.last_name')
+    user_id = serializers.ReadOnlyField(source='user.pk')
+    prize_id = serializers.ReadOnlyField(source='prize.pk')
+
+    class Meta:
+        model = models.AuctionRequest
+        fields = ['id', 'maxprice', 'prize_id',
+                  'user_first_name', 'user_last_name', 'user_id']
+
 class PostSerializer(serializers.ModelSerializer):
     owner_first_name = serializers.ReadOnlyField(source='owner.first_name')
     owner_last_name = serializers.ReadOnlyField(source='owner.last_name')

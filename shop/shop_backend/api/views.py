@@ -1,8 +1,6 @@
-from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework import permissions
-from rest_framework.parsers import FileUploadParser
 from . import models
 from . import serializers
 from .permissions import IsGetOrIsAdmin, IsOwnerOrAdminOrReadOnly
@@ -86,11 +84,14 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
             raise ParseError("Empty content")
         data = request.data
         data['picture'] = request.data['file']
-        serializer = serializers.PrizeClassSerializer(data=data)
-        if not serializer.is_valid():
-            return Response({"error":"can't validate input"}, status=status.HTTP_400_BAD_REQUEST)
         f = request.data['file']
-        prize = models.PrizeClass(**serializer.data)
+        params = {'name': request.data['name'],
+                  'description': request.data['description'],
+                  'price': request.data['price'],
+                  'count': request.data['count'],
+                  'auction': request.data['auction'] == 'true'}
+        serializer = serializers.PrizeClassSerializer()
+        prize = serializer.create(validated_data=params)
         prize.picture.save(f.name, f, save=True)
         prize.save()
         return Response({}, status=status.HTTP_201_CREATED)
@@ -143,6 +144,19 @@ class TokenTransferViewSet(viewsets.ModelViewSet):
             return Response({"error":"user must be specified"}, status=status.HTTP_400_BAD_REQUEST)
         serializer = serializers.TokenTransferSerializer(queryset, context={"request": 
                         request}, many=True)
+        return Response(serializer.data)
+
+class AuctionRequestList(generics.ListAPIView):
+    queryset = models.AuctionRequest.objects.all()
+    serializer_class = serializers.AuctionRequestSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def list(self, request):
+        prize = self.request.query_params.get("prize")
+        if not prize:
+            return Response({"error":"user must be specified"}, status=status.HTTP_400_BAD_REQUEST)
+        queryset = models.AuctionRequest.objects.filter(prize=prize).all()
+        serializer = serializers.AuctionRequestSerializer(queryset, many=True)
         return Response(serializer.data)
 
 class CurrentUserView(views.APIView):
