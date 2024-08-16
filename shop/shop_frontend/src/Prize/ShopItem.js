@@ -1,14 +1,28 @@
-import { fetchBackend } from '../Backend/Backend';
+import { fetchBackend, deleteBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import BuyButton from './Buy';
 import Button from 'react-bootstrap/Button';
+import PausedButton from '../Controls/PausedButton';
 
 function AuctionRequest(props) {
+    const handleDelete = () => {
+        deleteBackend("prizeauction/" + props.item.id + "/", {},
+            () => {
+                props.handleUpdate();
+            });
+    }
+
     return (<Row>
       <Col xs={3}>{props.item.user_first_name + " " + props.item.user_last_name}</Col>
       <Col xs={1}>{props.item.maxprice}</Col>
+      <Col xs={1}>
+          <PausedButton onClick={handleDelete}
+                        variant="outline-danger">
+                        {"Удалить"}
+          </PausedButton>
+      </Col>
     </Row>);
 }
 
@@ -61,7 +75,8 @@ export default function ShopItem(props) {
                     <Row>
                       <Col xs={3}>Пользователь</Col><Col xs={1}>Цена</Col>
                     </Row>
-                    {auctionRequests.map(r => <AuctionRequest item={r} key={r.user_id} />)}
+                    {auctionRequests.map(r => <AuctionRequest item={r} key={r.user_id}
+                        handleUpdate={fetchAuctionData}/>)}
                   </>
                 : ""
             }

@@ -159,6 +159,11 @@ class AuctionRequestList(generics.ListAPIView):
         serializer = serializers.AuctionRequestSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class AuctionRequestDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.AuctionRequest.objects.all()
+    serializer_class = serializers.AuctionRequestSerializer
+    permission_classes = [permissions.IsAdminUser]
+
 class CurrentUserView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
