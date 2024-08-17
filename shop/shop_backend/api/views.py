@@ -155,7 +155,7 @@ class AuctionRequestList(generics.ListAPIView):
         prize = self.request.query_params.get("prize")
         if not prize:
             return Response({"error":"user must be specified"}, status=status.HTTP_400_BAD_REQUEST)
-        queryset = models.AuctionRequest.objects.filter(prize=prize).all()
+        queryset = models.AuctionRequest.objects.filter(prize=prize).order_by("-maxprice").all()
         serializer = serializers.AuctionRequestSerializer(queryset, many=True)
         return Response(serializer.data)
 

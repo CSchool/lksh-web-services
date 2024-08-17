@@ -1,4 +1,4 @@
-import { fetchBackend, deleteBackend } from '../Backend/Backend';
+import { fetchBackend, deleteBackend, postBackend } from '../Backend/Backend';
 import React, { useState, useEffect } from 'react';
 import { Row, Col} from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -40,11 +40,20 @@ export default function ShopItem(props) {
             setAuctionRequests);
     };
 
-    useEffect(() => {
+    const fetchAll = () => {
         fetchData();
         if (props.auth.is_staff) {
             fetchAuctionData();
         }
+    };
+
+    const finishAuction = () => {
+        postBackend("finishauction/", {}, {id:props.match.params.id},
+            fetchAll);
+    };
+
+    useEffect(() => {
+        fetchAll();
         // eslint-disable-next-line
     }, []);
 
@@ -71,6 +80,11 @@ export default function ShopItem(props) {
                 ? <>
                     <Row>
                       <h2>{"Заявки на аукцион"}</h2>
+                    </Row>
+                    <Row>
+                      <Col xs={3}>
+                        <PausedButton onClick={finishAuction} variant="outline-primary">{"Провести аукцион"}</PausedButton>
+                      </Col>
                     </Row>
                     <Row>
                       <Col xs={3}>Пользователь</Col><Col xs={1}>Цена</Col>

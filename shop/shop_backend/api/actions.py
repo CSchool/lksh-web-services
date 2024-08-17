@@ -40,6 +40,36 @@ class BuyPrizeView(views.APIView):
         else:
             return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
 
+class AuctionFinishView(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request, format=None):
+        with transaction.atomic():
+            prize = models.PrizeClass.objects. \
+                select_for_update().get(pk=request.data["id"])
+            if prize.count == 0:
+                return Response({"error":"not enough items"}, status=status.HTTP_400_BAD_REQUEST)
+            if prize.count != 1:
+                return Response({"error":"not implemented"}, status=status.HTTP_400_BAD_REQUEST)
+            # select the winner
+            requests = prize.auctionrequest_set.order_by("-maxprice")
+            for req in requests:
+                profile = req.user.userprofile
+                if profile.tokens < req.maxprice:
+                    continue
+
+                item = models.PrizeItem.create(prize, profile)
+                profile.tokens -= req.maxprice
+                profile.save()
+                prize.count -= 1
+                prize.save()
+                item.price = req.maxprice
+                item.save()
+                break
+
+            requests.delete()
+            return Response({}, status=status.HTTP_200_OK)
+
 class GivePrizeView(views.APIView):
     permission_classes = [permissions.IsAdminUser]
 

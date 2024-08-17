@@ -14,6 +14,10 @@ function AuctionButton(props) {
             })
     };
 
+    if (props.auth.is_staff) {
+        return "Аукцион";
+    }
+
     return (<>
         <Form.Control type="number" id="price"
             onChange={e => setPrice(e.target.value)}

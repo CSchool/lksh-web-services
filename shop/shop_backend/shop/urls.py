@@ -38,6 +38,7 @@ urlpatterns = [
    path('prizeitems/', views.PrizeItemList.as_view(), name='prizeitems'),
    path('prizeauction/', views.AuctionRequestList.as_view(), name='prizeauction'),
    path('prizeauction/<int:pk>/', views.AuctionRequestDetail.as_view()),
+   path('finishauction/', actions.AuctionFinishView.as_view(), name='finishauction'),
    path('groups/', views.GroupListView.as_view(), name='groups'),
    path('buy/', actions.BuyPrizeView.as_view(), name='buyprize'),
    path('pay/', actions.PayTokensView.as_view(), name='paytokens'),
