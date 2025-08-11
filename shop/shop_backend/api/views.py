@@ -9,7 +9,9 @@ from django.contrib.auth.models import User
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsGetOrIsAdmin]
     serializer_class = serializers.UserSerializer
-    queryset = models.User.objects.all()
+
+    def get_queryset(self):
+        return models.User.objects.all()
 
     def create(self, request, *args, **kwargs):
         if isinstance(request.data, list):
@@ -44,7 +46,7 @@ class UserViewSet(viewsets.ModelViewSet):
         queryset = models.User.objects.all().filter(is_active=True)
         group = self.request.query_params.get("group")
         if group:
-            queryset = queryset.filter(groups=group)
+            queryset = self.get_queryset().filter(groups=group)
         queryset.order_by("last_name")
         serializer = serializers.UserSerializer(queryset, context={"request": 
                         request}, many=True)
@@ -57,12 +59,14 @@ class GroupListView(generics.ListAPIView):
 
 
 class PrizeClassViewSet(viewsets.ModelViewSet):
-    queryset = models.PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
     serializer_class = serializers.PrizeClassSerializer
     permission_classes = [IsGetOrIsAdmin]
 
+    def get_queryset(self):
+        return models.PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
+
     def list(self, request):
-        serializer = serializers.PrizeClassSerializer(self.queryset,
+        serializer = serializers.PrizeClassSerializer(self.get_queryset(),
                                                       context={'request': request},
                                                       many=True)
         # queryset = models.User.objects.all().filter(is_active=True)
@@ -72,6 +76,7 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
         # queryset.order_by("last_name")
         # serializer = serializers.UserSerializer(queryset, context={"request": 
         #                 request}, many=True)
+        print(serializer.data)
         return Response(serializer.data)
 
     # TODO: can't create prize with count=0
@@ -131,9 +136,11 @@ class PrizeItemList(generics.ListAPIView):
             return Response({"error":"not authenticated"}, status=status.HTTP_400_BAD_REQUEST)
 
 class TokenTransferViewSet(viewsets.ModelViewSet):
-    queryset = models.TokenTransfer.objects.all()
     serializer_class = serializers.TokenTransferSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    def get_queryset(self):
+        return models.TokenTransfer.objects.all()
 
     def list(self, request):
         queryset = models.TokenTransfer.objects.all()
@@ -142,7 +149,7 @@ class TokenTransferViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(to_user=to)
         else:
             return Response({"error":"user must be specified"}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = serializers.TokenTransferSerializer(queryset, context={"request": 
+        serializer = serializers.TokenTransferSerializer(self.get_queryset(), context={"request": 
                         request}, many=True)
         return Response(serializer.data)
 

@@ -23,9 +23,9 @@ from api import views
 from api import actions
 
 router = routers.DefaultRouter()
-router.register(r'prizeclasses', views.PrizeClassViewSet)
-router.register(r'tokentransfers', views.TokenTransferViewSet)
-router.register(r'users', views.UserViewSet)
+router.register(r'prizeclasses', views.PrizeClassViewSet, basename='prizeclass')
+router.register(r'tokentransfers', views.TokenTransferViewSet, basename='tokentransfer')
+router.register(r'users', views.UserViewSet, basename='user')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
