@@ -46,7 +46,7 @@ class UserViewSet(viewsets.ModelViewSet):
         queryset = models.User.objects.all().filter(is_active=True)
         group = self.request.query_params.get("group")
         if group:
-            queryset = self.get_queryset().filter(groups=group)
+            queryset = queryset.filter(groups=group)
         queryset.order_by("last_name")
         serializer = serializers.UserSerializer(queryset, context={"request": 
                         request}, many=True)
