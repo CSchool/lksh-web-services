@@ -76,7 +76,6 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
         # queryset.order_by("last_name")
         # serializer = serializers.UserSerializer(queryset, context={"request": 
         #                 request}, many=True)
-        print(serializer.data)
         return Response(serializer.data)
 
     # TODO: can't create prize with count=0
