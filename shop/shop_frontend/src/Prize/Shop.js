@@ -14,7 +14,7 @@ function ShopLine(props) {
             <Col xs={4}>{props.item.description}</Col>
             <Col xs={1}>{props.item.price}</Col>
             <Col xs={1}>{props.item.count}</Col>
-            <Col xs={2}><BuyButton item={props.item} auth={props.auth} /></Col>
+            {props.old ? "" : <Col xs={2}><BuyButton item={props.item} auth={props.auth} /></Col>}
         </Row>
     );
 }
@@ -23,7 +23,7 @@ export default function Shop(props) {
     const [data, setData] = useState([]);
 
     const fetchData = () => {
-        fetchBackend("prizeclasses/", {}, setData);
+        fetchBackend("prizeclasses/", {old:props.old}, setData);
     };
 
     useEffect(() => {
@@ -57,6 +57,7 @@ export default function Shop(props) {
                 return (
                     <ShopLine key={item.id} item={item}
                         auth={props.auth}
+                        old={props.old}
                         onChange={fetchData}/>
                 );
             })}

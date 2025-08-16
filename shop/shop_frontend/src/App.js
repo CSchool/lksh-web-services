@@ -108,6 +108,8 @@ class App extends Component {
                                 props={childProps} />
                             <AppliedRoute path="/shop" exact component={Shop}
                                 props={childProps} />
+                            <AppliedRoute path="/oldshop" exact component={Shop}
+                                props={{...childProps, old:true}} />
                             <AppliedRoute path="/shopitem/:id" exact component={ShopItem}
                                 props={childProps} />
                             <AppliedRoute path="/giveaway" exact component={Giveaway}

@@ -47,6 +47,8 @@ class NavbarMain extends Component {
                         <NavLink link="/prizes"
                             text={this.props.auth.is_staff ? "Выданные призы" : "Мои призы"}
                             show={this.props.auth.isAuthenticated} />
+                        <NavLink link="/oldshop" text="Старые призы"
+                            show={this.props.auth.is_staff} />
                         <NavLink link="#" text="Выйти"
                             show={this.props.auth.isAuthenticated}
                             onClick={this.handleLogout} />

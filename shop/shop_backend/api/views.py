@@ -61,14 +61,9 @@ class GroupListView(generics.ListAPIView):
 class PrizeClassViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PrizeClassSerializer
     permission_classes = [IsGetOrIsAdmin]
-
-    def get_queryset(self):
-        return models.PrizeClass.objects.all().filter(count__gt=0).order_by('-price')
+    queryset = models.PrizeClass.objects.all()
 
     def list(self, request):
-        serializer = serializers.PrizeClassSerializer(self.get_queryset(),
-                                                      context={'request': request},
-                                                      many=True)
         # queryset = models.User.objects.all().filter(is_active=True)
         # group = self.request.query_params.get("group")
         # if group:
@@ -76,6 +71,15 @@ class PrizeClassViewSet(viewsets.ModelViewSet):
         # queryset.order_by("last_name")
         # serializer = serializers.UserSerializer(queryset, context={"request": 
         #                 request}, many=True)
+        old = self.request.query_params.get("old")
+        if old == "true":
+            queryset = self.queryset.filter(count=0)
+        else:
+            queryset = self.queryset.filter(count__gt=0)
+        queryset = queryset.order_by('-price')
+        serializer = serializers.PrizeClassSerializer(queryset,
+                                                      context={'request': request},
+                                                      many=True)
         return Response(serializer.data)
 
     # TODO: can't create prize with count=0
